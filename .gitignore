@@ -1,0 +1,11 @@
+.DS_Store
+/vendor
+/cover
+cover.out
+
+
+# Binaries
+*.test
+
+# Profiling output
+*.prof
