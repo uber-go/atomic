@@ -30,7 +30,8 @@ func TestInt32(t *testing.T) {
 	atom := NewInt32(42)
 
 	require.Equal(t, int32(42), atom.Load(), "Load didn't work.")
-	require.Equal(t, int32(44), atom.Add(2), "Add didn't work.")
+	require.Equal(t, int32(46), atom.Add(4), "Add didn't work.")
+	require.Equal(t, int32(44), atom.Sub(2), "Sub didn't work.")
 	require.Equal(t, int32(45), atom.Inc(), "Inc didn't work.")
 	require.Equal(t, int32(44), atom.Dec(), "Dec didn't work.")
 
@@ -48,7 +49,8 @@ func TestInt64(t *testing.T) {
 	atom := NewInt64(42)
 
 	require.Equal(t, int64(42), atom.Load(), "Load didn't work.")
-	require.Equal(t, int64(44), atom.Add(2), "Add didn't work.")
+	require.Equal(t, int64(46), atom.Add(4), "Add didn't work.")
+	require.Equal(t, int64(44), atom.Sub(2), "Sub didn't work.")
 	require.Equal(t, int64(45), atom.Inc(), "Inc didn't work.")
 	require.Equal(t, int64(44), atom.Dec(), "Dec didn't work.")
 
@@ -66,7 +68,8 @@ func TestUint32(t *testing.T) {
 	atom := NewUint32(42)
 
 	require.Equal(t, uint32(42), atom.Load(), "Load didn't work.")
-	require.Equal(t, uint32(44), atom.Add(2), "Add didn't work.")
+	require.Equal(t, uint32(46), atom.Add(4), "Add didn't work.")
+	require.Equal(t, uint32(44), atom.Sub(2), "Sub didn't work.")
 	require.Equal(t, uint32(45), atom.Inc(), "Inc didn't work.")
 	require.Equal(t, uint32(44), atom.Dec(), "Dec didn't work.")
 
@@ -84,7 +87,8 @@ func TestUint64(t *testing.T) {
 	atom := NewUint64(42)
 
 	require.Equal(t, uint64(42), atom.Load(), "Load didn't work.")
-	require.Equal(t, uint64(44), atom.Add(2), "Add didn't work.")
+	require.Equal(t, uint64(46), atom.Add(4), "Add didn't work.")
+	require.Equal(t, uint64(44), atom.Sub(2), "Sub didn't work.")
 	require.Equal(t, uint64(45), atom.Inc(), "Inc didn't work.")
 	require.Equal(t, uint64(44), atom.Dec(), "Dec didn't work.")
 

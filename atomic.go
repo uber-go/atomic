@@ -42,6 +42,11 @@ func (i *Int32) Add(n int32) int32 {
 	return atomic.AddInt32(&i.int32, n)
 }
 
+// Sub atomically subtracts from the wrapped int32 and returns the new value.
+func (i *Int32) Sub(n int32) int32 {
+	return atomic.AddInt32(&i.int32, -1*n)
+}
+
 // Inc atomically increments the wrapped int32 and returns the new value.
 func (i *Int32) Inc() int32 {
 	return i.Add(1)
@@ -49,7 +54,7 @@ func (i *Int32) Inc() int32 {
 
 // Dec atomically decrements the wrapped int32 and returns the new value.
 func (i *Int32) Dec() int32 {
-	return i.Add(-1)
+	return i.Sub(1)
 }
 
 // CAS is an atomic compare-and-swap.
@@ -85,6 +90,11 @@ func (i *Int64) Add(n int64) int64 {
 	return atomic.AddInt64(&i.int64, n)
 }
 
+// Sub atomically subtracts from the wrapped int64 and returns the new value.
+func (i *Int64) Sub(n int64) int64 {
+	return atomic.AddInt64(&i.int64, -1*n)
+}
+
 // Inc atomically increments the wrapped int64 and returns the new value.
 func (i *Int64) Inc() int64 {
 	return i.Add(1)
@@ -92,7 +102,7 @@ func (i *Int64) Inc() int64 {
 
 // Dec atomically decrements the wrapped int64 and returns the new value.
 func (i *Int64) Dec() int64 {
-	return i.Add(-1)
+	return i.Sub(1)
 }
 
 // CAS is an atomic compare-and-swap.
@@ -128,6 +138,11 @@ func (i *Uint32) Add(n uint32) uint32 {
 	return atomic.AddUint32(&i.uint32, n)
 }
 
+// Sub atomically subtracts from the wrapped uint32 and returns the new value.
+func (i *Uint32) Sub(n uint32) uint32 {
+	return atomic.AddUint32(&i.uint32, ^(n - 1))
+}
+
 // Inc atomically increments the wrapped uint32 and returns the new value.
 func (i *Uint32) Inc() uint32 {
 	return i.Add(1)
@@ -135,7 +150,7 @@ func (i *Uint32) Inc() uint32 {
 
 // Dec atomically decrements the wrapped int32 and returns the new value.
 func (i *Uint32) Dec() uint32 {
-	return i.Add(^uint32(0))
+	return i.Sub(1)
 }
 
 // CAS is an atomic compare-and-swap.
@@ -171,6 +186,11 @@ func (i *Uint64) Add(n uint64) uint64 {
 	return atomic.AddUint64(&i.uint64, n)
 }
 
+// Sub atomically subtracts from the wrapped uint64 and returns the new value.
+func (i *Uint64) Sub(n uint64) uint64 {
+	return atomic.AddUint64(&i.uint64, ^(n - 1))
+}
+
 // Inc atomically increments the wrapped uint64 and returns the new value.
 func (i *Uint64) Inc() uint64 {
 	return i.Add(1)
@@ -178,7 +198,7 @@ func (i *Uint64) Inc() uint64 {
 
 // Dec atomically decrements the wrapped uint64 and returns the new value.
 func (i *Uint64) Dec() uint64 {
-	return i.Add(^uint64(0))
+	return i.Sub(1)
 }
 
 // CAS is an atomic compare-and-swap.
