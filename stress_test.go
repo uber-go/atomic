@@ -99,3 +99,20 @@ func TestStressUint64(t *testing.T) {
 		}()
 	}
 }
+
+func TestStressBool(t *testing.T) {
+	defer runtime.GOMAXPROCS(runtime.GOMAXPROCS(_parallelism))
+	atom := NewBool(false)
+	for i := 0; i < _parallelism; i++ {
+		go func() {
+			for j := 0; j < _iterations; j++ {
+				atom.Load()
+				atom.Store(false)
+				atom.Swap()
+				atom.Load()
+				atom.Swap()
+				atom.Swap()
+			}
+		}()
+	}
+}
