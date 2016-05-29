@@ -2,7 +2,7 @@
 /vendor
 /cover
 cover.out
-
+lint.log
 
 # Binaries
 *.test
