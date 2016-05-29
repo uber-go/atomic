@@ -36,6 +36,7 @@ func TestStressInt32(t *testing.T) {
 			for j := 0; j < _iterations; j++ {
 				atom.Load()
 				atom.Add(1)
+				atom.Sub(2)
 				atom.Inc()
 				atom.Dec()
 				atom.CAS(1, 0)
@@ -54,6 +55,7 @@ func TestStressInt64(t *testing.T) {
 			for j := 0; j < _iterations; j++ {
 				atom.Load()
 				atom.Add(1)
+				atom.Sub(2)
 				atom.Inc()
 				atom.Dec()
 				atom.CAS(1, 0)
@@ -72,6 +74,7 @@ func TestStressUint32(t *testing.T) {
 			for j := 0; j < _iterations; j++ {
 				atom.Load()
 				atom.Add(1)
+				atom.Sub(2)
 				atom.Inc()
 				atom.Dec()
 				atom.CAS(1, 0)
@@ -90,6 +93,7 @@ func TestStressUint64(t *testing.T) {
 			for j := 0; j < _iterations; j++ {
 				atom.Load()
 				atom.Add(1)
+				atom.Sub(2)
 				atom.Inc()
 				atom.Dec()
 				atom.CAS(1, 0)
