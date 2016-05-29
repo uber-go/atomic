@@ -197,7 +197,7 @@ func (i *Uint64) Swap(n uint64) uint64 {
 }
 
 // Bool is an atomic Boolean.
-type Bool struct{ int32 }
+type Bool struct{ uint32 }
 
 // NewBool creates a Bool.
 func NewBool(initial bool) *Bool {
@@ -209,23 +209,32 @@ func NewBool(initial bool) *Bool {
 
 // Load atomically loads the Boolean.
 func (b *Bool) Load() bool {
-	return b.truthy(atomic.LoadInt32(&b.int32))
+	return b.truthy(atomic.LoadUint32(&b.uint32))
 }
 
 // Store atomically stores the passed value.
 func (b *Bool) Store(new bool) {
 	if new {
-		atomic.StoreInt32(&b.int32, 1)
+		atomic.StoreUint32(&b.uint32, 1)
 	} else {
-		atomic.StoreInt32(&b.int32, 0)
+		atomic.StoreUint32(&b.uint32, 0)
 	}
 }
 
-// Swap atomically negates the Boolean and returns the previous value.
-func (b *Bool) Swap() bool {
-	return b.truthy(atomic.AddInt32(&b.int32, 1) - 1)
+// Swap sets the given value and returns the previous value.
+func (b *Bool) Swap(new bool) bool {
+	n := uint32(0)
+	if new {
+		n = 1
+	}
+	return b.truthy(atomic.SwapUint32(&b.uint32, n))
 }
 
-func (b *Bool) truthy(n int32) bool {
-	return n%2 == 1
+// Toggle atomically negates the Boolean and returns the previous value.
+func (b *Bool) Toggle() bool {
+	return b.truthy(atomic.AddUint32(&b.uint32, 1) - 1)
+}
+
+func (b *Bool) truthy(n uint32) bool {
+	return n&1 == 1
 }

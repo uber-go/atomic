@@ -108,10 +108,10 @@ func TestStressBool(t *testing.T) {
 			for j := 0; j < _iterations; j++ {
 				atom.Load()
 				atom.Store(false)
-				atom.Swap()
+				atom.Swap(true)
 				atom.Load()
-				atom.Swap()
-				atom.Swap()
+				atom.Toggle()
+				atom.Toggle()
 			}
 		}()
 	}
