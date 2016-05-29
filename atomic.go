@@ -44,7 +44,7 @@ func (i *Int32) Add(n int32) int32 {
 
 // Sub atomically subtracts from the wrapped int32 and returns the new value.
 func (i *Int32) Sub(n int32) int32 {
-	return atomic.AddInt32(&i.int32, -1*n)
+	return atomic.AddInt32(&i.int32, -n)
 }
 
 // Inc atomically increments the wrapped int32 and returns the new value.
@@ -92,7 +92,7 @@ func (i *Int64) Add(n int64) int64 {
 
 // Sub atomically subtracts from the wrapped int64 and returns the new value.
 func (i *Int64) Sub(n int64) int64 {
-	return atomic.AddInt64(&i.int64, -1*n)
+	return atomic.AddInt64(&i.int64, -n)
 }
 
 // Inc atomically increments the wrapped int64 and returns the new value.
