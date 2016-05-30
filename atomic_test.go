@@ -101,3 +101,18 @@ func TestUint64(t *testing.T) {
 	atom.Store(42)
 	require.Equal(t, uint64(42), atom.Load(), "Store didn't set the correct value.")
 }
+
+func TestBool(t *testing.T) {
+	atom := NewBool(false)
+	require.False(t, atom.Toggle(), "Expected swap to return previous value.")
+	require.True(t, atom.Load(), "Unexpected state after swap.")
+
+	atom.Store(false)
+	require.False(t, atom.Load(), "Unexpected state after store.")
+
+	prev := atom.Swap(false)
+	require.False(t, prev, "Expected Swap to return previous value.")
+
+	prev = atom.Swap(true)
+	require.False(t, prev, "Expected Swap to return previous value.")
+}
