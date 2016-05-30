@@ -12,7 +12,8 @@ functionality of the standard library, but wraps the primitive numeric types to
 provide a safer, more convenient API.
 
 ```go
-atom := atomic.NewUint32(0)
+var atom atomic.Uint32
+atom.Store(42)
 atom.Sub(2)
 atom.CAS(40, 11)
 ```
