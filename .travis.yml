@@ -15,4 +15,5 @@ install:
 
 script:
   - make test_ci
+  - make lint
   - travis_retry goveralls -coverprofile=cover.out -service=travis-ci
