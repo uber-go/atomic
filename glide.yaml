@@ -1,5 +1,5 @@
 package: github.com/uber-go/atomic
-imports:
+import:
 # Test dependencies
 - package: github.com/stretchr/testify
   subpackages:
