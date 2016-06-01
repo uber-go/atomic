@@ -1,4 +1,4 @@
-PACKAGES := $(shell glide novendor)
+PACKAGES := $(shell glide nv)
 # Many Go tools take file globs or directories as arguments instead of packages.
 PACKAGE_FILES ?= *.go
 
