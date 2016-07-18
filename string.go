@@ -26,8 +26,12 @@ import "sync/atomic"
 type String struct{ atomic.Value }
 
 // NewString creates a String.
-func NewString(s string) *String {
-	return &String{}
+func NewString(str string) *String {
+	s := &String{}
+	if str != "" {
+		s.Store(str)
+	}
+	return s
 }
 
 // Load atomically loads the wrapped string.
