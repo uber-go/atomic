@@ -120,3 +120,18 @@ func TestStressBool(t *testing.T) {
 		}()
 	}
 }
+
+func TestStressString(t *testing.T) {
+	defer runtime.GOMAXPROCS(runtime.GOMAXPROCS(_parallelism))
+	atom := NewString("")
+	for i := 0; i < _parallelism; i++ {
+		go func() {
+			for j := 0; j < _iterations; j++ {
+				atom.Load()
+				atom.Store("abc")
+				atom.Load()
+				atom.Store("def")
+			}
+		}()
+	}
+}
