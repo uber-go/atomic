@@ -25,7 +25,7 @@ package atomic
 import "sync/atomic"
 
 // Int32 is an atomic wrapper around an int32.
-type Int32 struct{ int32 }
+type Int32 struct{ v int32 }
 
 // NewInt32 creates an Int32.
 func NewInt32(i int32) *Int32 {
@@ -34,17 +34,17 @@ func NewInt32(i int32) *Int32 {
 
 // Load atomically loads the wrapped value.
 func (i *Int32) Load() int32 {
-	return atomic.LoadInt32(&i.int32)
+	return atomic.LoadInt32(&i.v)
 }
 
 // Add atomically adds to the wrapped int32 and returns the new value.
 func (i *Int32) Add(n int32) int32 {
-	return atomic.AddInt32(&i.int32, n)
+	return atomic.AddInt32(&i.v, n)
 }
 
 // Sub atomically subtracts from the wrapped int32 and returns the new value.
 func (i *Int32) Sub(n int32) int32 {
-	return atomic.AddInt32(&i.int32, -n)
+	return atomic.AddInt32(&i.v, -n)
 }
 
 // Inc atomically increments the wrapped int32 and returns the new value.
@@ -59,21 +59,21 @@ func (i *Int32) Dec() int32 {
 
 // CAS is an atomic compare-and-swap.
 func (i *Int32) CAS(old, new int32) bool {
-	return atomic.CompareAndSwapInt32(&i.int32, old, new)
+	return atomic.CompareAndSwapInt32(&i.v, old, new)
 }
 
 // Store atomically stores the passed value.
 func (i *Int32) Store(n int32) {
-	atomic.StoreInt32(&i.int32, n)
+	atomic.StoreInt32(&i.v, n)
 }
 
 // Swap atomically swaps the wrapped int32 and returns the old value.
 func (i *Int32) Swap(n int32) int32 {
-	return atomic.SwapInt32(&i.int32, n)
+	return atomic.SwapInt32(&i.v, n)
 }
 
 // Int64 is an atomic wrapper around an int64.
-type Int64 struct{ int64 }
+type Int64 struct{ v int64 }
 
 // NewInt64 creates an Int64.
 func NewInt64(i int64) *Int64 {
@@ -82,17 +82,17 @@ func NewInt64(i int64) *Int64 {
 
 // Load atomically loads the wrapped value.
 func (i *Int64) Load() int64 {
-	return atomic.LoadInt64(&i.int64)
+	return atomic.LoadInt64(&i.v)
 }
 
 // Add atomically adds to the wrapped int64 and returns the new value.
 func (i *Int64) Add(n int64) int64 {
-	return atomic.AddInt64(&i.int64, n)
+	return atomic.AddInt64(&i.v, n)
 }
 
 // Sub atomically subtracts from the wrapped int64 and returns the new value.
 func (i *Int64) Sub(n int64) int64 {
-	return atomic.AddInt64(&i.int64, -n)
+	return atomic.AddInt64(&i.v, -n)
 }
 
 // Inc atomically increments the wrapped int64 and returns the new value.
@@ -107,21 +107,21 @@ func (i *Int64) Dec() int64 {
 
 // CAS is an atomic compare-and-swap.
 func (i *Int64) CAS(old, new int64) bool {
-	return atomic.CompareAndSwapInt64(&i.int64, old, new)
+	return atomic.CompareAndSwapInt64(&i.v, old, new)
 }
 
 // Store atomically stores the passed value.
 func (i *Int64) Store(n int64) {
-	atomic.StoreInt64(&i.int64, n)
+	atomic.StoreInt64(&i.v, n)
 }
 
 // Swap atomically swaps the wrapped int64 and returns the old value.
 func (i *Int64) Swap(n int64) int64 {
-	return atomic.SwapInt64(&i.int64, n)
+	return atomic.SwapInt64(&i.v, n)
 }
 
 // Uint32 is an atomic wrapper around an uint32.
-type Uint32 struct{ uint32 }
+type Uint32 struct{ v uint32 }
 
 // NewUint32 creates a Uint32.
 func NewUint32(i uint32) *Uint32 {
@@ -130,17 +130,17 @@ func NewUint32(i uint32) *Uint32 {
 
 // Load atomically loads the wrapped value.
 func (i *Uint32) Load() uint32 {
-	return atomic.LoadUint32(&i.uint32)
+	return atomic.LoadUint32(&i.v)
 }
 
 // Add atomically adds to the wrapped uint32 and returns the new value.
 func (i *Uint32) Add(n uint32) uint32 {
-	return atomic.AddUint32(&i.uint32, n)
+	return atomic.AddUint32(&i.v, n)
 }
 
 // Sub atomically subtracts from the wrapped uint32 and returns the new value.
 func (i *Uint32) Sub(n uint32) uint32 {
-	return atomic.AddUint32(&i.uint32, ^(n - 1))
+	return atomic.AddUint32(&i.v, ^(n - 1))
 }
 
 // Inc atomically increments the wrapped uint32 and returns the new value.
@@ -155,21 +155,21 @@ func (i *Uint32) Dec() uint32 {
 
 // CAS is an atomic compare-and-swap.
 func (i *Uint32) CAS(old, new uint32) bool {
-	return atomic.CompareAndSwapUint32(&i.uint32, old, new)
+	return atomic.CompareAndSwapUint32(&i.v, old, new)
 }
 
 // Store atomically stores the passed value.
 func (i *Uint32) Store(n uint32) {
-	atomic.StoreUint32(&i.uint32, n)
+	atomic.StoreUint32(&i.v, n)
 }
 
 // Swap atomically swaps the wrapped uint32 and returns the old value.
 func (i *Uint32) Swap(n uint32) uint32 {
-	return atomic.SwapUint32(&i.uint32, n)
+	return atomic.SwapUint32(&i.v, n)
 }
 
 // Uint64 is an atomic wrapper around a uint64.
-type Uint64 struct{ uint64 }
+type Uint64 struct{ v uint64 }
 
 // NewUint64 creates a Uint64.
 func NewUint64(i uint64) *Uint64 {
@@ -178,17 +178,17 @@ func NewUint64(i uint64) *Uint64 {
 
 // Load atomically loads the wrapped value.
 func (i *Uint64) Load() uint64 {
-	return atomic.LoadUint64(&i.uint64)
+	return atomic.LoadUint64(&i.v)
 }
 
 // Add atomically adds to the wrapped uint64 and returns the new value.
 func (i *Uint64) Add(n uint64) uint64 {
-	return atomic.AddUint64(&i.uint64, n)
+	return atomic.AddUint64(&i.v, n)
 }
 
 // Sub atomically subtracts from the wrapped uint64 and returns the new value.
 func (i *Uint64) Sub(n uint64) uint64 {
-	return atomic.AddUint64(&i.uint64, ^(n - 1))
+	return atomic.AddUint64(&i.v, ^(n - 1))
 }
 
 // Inc atomically increments the wrapped uint64 and returns the new value.
@@ -203,21 +203,21 @@ func (i *Uint64) Dec() uint64 {
 
 // CAS is an atomic compare-and-swap.
 func (i *Uint64) CAS(old, new uint64) bool {
-	return atomic.CompareAndSwapUint64(&i.uint64, old, new)
+	return atomic.CompareAndSwapUint64(&i.v, old, new)
 }
 
 // Store atomically stores the passed value.
 func (i *Uint64) Store(n uint64) {
-	atomic.StoreUint64(&i.uint64, n)
+	atomic.StoreUint64(&i.v, n)
 }
 
 // Swap atomically swaps the wrapped uint64 and returns the old value.
 func (i *Uint64) Swap(n uint64) uint64 {
-	return atomic.SwapUint64(&i.uint64, n)
+	return atomic.SwapUint64(&i.v, n)
 }
 
 // Bool is an atomic Boolean.
-type Bool struct{ uint32 }
+type Bool struct{ v uint32 }
 
 // NewBool creates a Bool.
 func NewBool(initial bool) *Bool {
@@ -226,22 +226,22 @@ func NewBool(initial bool) *Bool {
 
 // Load atomically loads the Boolean.
 func (b *Bool) Load() bool {
-	return truthy(atomic.LoadUint32(&b.uint32))
+	return truthy(atomic.LoadUint32(&b.v))
 }
 
 // Store atomically stores the passed value.
 func (b *Bool) Store(new bool) {
-	atomic.StoreUint32(&b.uint32, boolToInt(new))
+	atomic.StoreUint32(&b.v, boolToInt(new))
 }
 
 // Swap sets the given value and returns the previous value.
 func (b *Bool) Swap(new bool) bool {
-	return truthy(atomic.SwapUint32(&b.uint32, boolToInt(new)))
+	return truthy(atomic.SwapUint32(&b.v, boolToInt(new)))
 }
 
 // Toggle atomically negates the Boolean and returns the previous value.
 func (b *Bool) Toggle() bool {
-	return truthy(atomic.AddUint32(&b.uint32, 1) - 1)
+	return truthy(atomic.AddUint32(&b.v, 1) - 1)
 }
 
 func truthy(n uint32) bool {

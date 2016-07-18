@@ -23,7 +23,7 @@ package atomic
 import "sync/atomic"
 
 // String is an atomic type-safe wrapper around atomic.Value for strings.
-type String struct{ atomic.Value }
+type String struct{ v atomic.Value }
 
 // NewString creates a String.
 func NewString(str string) *String {
@@ -36,7 +36,7 @@ func NewString(str string) *String {
 
 // Load atomically loads the wrapped string.
 func (s *String) Load() string {
-	v := s.Value.Load()
+	v := s.v.Load()
 	if v == nil {
 		return ""
 	}
@@ -47,5 +47,5 @@ func (s *String) Load() string {
 // Note: Converting the string to an interface{} to store in the atomic.Value
 // requires an allocation.
 func (s *String) Store(str string) {
-	s.Value.Store(str)
+	s.v.Store(str)
 }
