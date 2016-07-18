@@ -39,5 +39,5 @@ func TestString(t *testing.T) {
 	require.Equal(t, "abc", atom.Load(), "Unexpected value after Store")
 
 	atom = NewString("bcd")
-	require.Equal(t, "", atom.Load(), "Expected Load to return initialized value")
+	require.Equal(t, "bcd", atom.Load(), "Expected Load to return initialized value")
 }
