@@ -1,5 +1,6 @@
 sudo: false
 language: go
+go_import_path: go.uber.org/thriftrw
 
 go:
   - 1.5
