@@ -116,3 +116,16 @@ func TestBool(t *testing.T) {
 	prev = atom.Swap(true)
 	require.False(t, prev, "Expected Swap to return previous value.")
 }
+
+func TestFloat64(t *testing.T) {
+	atom := NewFloat64(4.2)
+
+	require.Equal(t, float64(4.2), atom.Load(), "Load didn't work.")
+
+	require.True(t, atom.CAS(4.2, 0.5), "CAS didn't report a swap.")
+	require.Equal(t, float64(0.5), atom.Load(), "CAS didn't set the correct value.")
+	require.False(t, atom.CAS(0.0, 1.5), "CAS reported a swap.")
+
+	atom.Store(42.0)
+	require.Equal(t, float64(42.0), atom.Load(), "Store didn't set the correct value.")
+}

@@ -22,7 +22,10 @@
 // access.
 package atomic
 
-import "sync/atomic"
+import (
+	"math"
+	"sync/atomic"
+)
 
 // Int32 is an atomic wrapper around an int32.
 type Int32 struct{ v int32 }
@@ -253,4 +256,29 @@ func boolToInt(b bool) uint32 {
 		return 1
 	}
 	return 0
+}
+
+// Float64 is an atomic wrapper around float64.
+type Float64 struct {
+	v uint64
+}
+
+// NewFloat64 creates a Float64.
+func NewFloat64(f float64) *Float64 {
+	return &Float64{math.Float64bits(f)}
+}
+
+// Load atomically loads the wrapped value.
+func (f *Float64) Load() float64 {
+	return math.Float64frombits(atomic.LoadUint64(&f.v))
+}
+
+// Store atomically stores the passed value.
+func (f *Float64) Store(s float64) {
+	atomic.StoreUint64(&f.v, math.Float64bits(s))
+}
+
+// CAS is an atomic compare-and-swap.
+func (f *Float64) CAS(old, new float64) bool {
+	return atomic.CompareAndSwapUint64(&f.v, math.Float64bits(old), math.Float64bits(new))
 }
