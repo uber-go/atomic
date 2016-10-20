@@ -3,7 +3,7 @@
 set -e
 
 COVER=cover
-ROOT_PKG=github.com/uber-go/atomic
+ROOT_PKG=go.uber.org/atomic
 
 if [[ -d "$COVER" ]]; then
 	rm -rf "$COVER"

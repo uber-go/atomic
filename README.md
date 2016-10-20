@@ -1,9 +1,9 @@
 # atomic [![GoDoc][doc-img]][doc] [![Build Status][ci-img]][ci] [![Coverage Status][cov-img]][cov]
 
-Simple numeric wrappers to enforce atomic access.
+Simple wrappers for primitive types to enforce atomic access.
 
 ## Installation
-`go get -u github.com/uber-go/atomic`
+`go get -u go.uber.org/atomic`
 
 ## Usage
 The standard library's `sync/atomic` is powerful, but it's easy to forget which
