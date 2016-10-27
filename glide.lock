@@ -1,5 +1,5 @@
 hash: f14d51408e3e0e4f73b34e4039484c78059cd7fc5f4996fdd73db20dc8d24f53
-updated: 2016-10-19T23:01:21.556384533-07:00
+updated: 2016-10-27T00:10:51.16960137-07:00
 imports: []
 testImports:
 - name: github.com/davecgh/go-spew
@@ -15,5 +15,3 @@ testImports:
   subpackages:
   - assert
   - require
-- name: github.com/uber-go/atomic
-  version: 0c9e689d64f004564b79d9a663634756df322902
