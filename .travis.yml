@@ -1,5 +1,6 @@
 sudo: false
 language: go
+go_import_path: go.uber.org/atomic
 
 go:
   - 1.5
@@ -15,5 +16,6 @@ install:
 
 script:
   - make test_ci
+  - scripts/test-ubergo.sh
   - make lint
   - travis_retry goveralls -coverprofile=cover.out -service=travis-ci
