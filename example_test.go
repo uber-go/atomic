@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package atomic
+package atomic_test
 
 import (
 	"fmt"
 
-	atomic "."
+	"go.uber.org/atomic"
 )
 
 func Example() {
