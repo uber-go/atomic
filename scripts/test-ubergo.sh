@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -euox pipefail
 IFS=$'\n\t'
 
 # This script creates a fake GOPATH, symlinks in the current
@@ -17,7 +17,10 @@ PKG_PARENT="$WORK_DIR/src/github.com/uber-go"
 PKG_DIR="$PKG_PARENT/atomic"
 
 mkdir -p "$PKG_PARENT"
-ln -s `pwd` "$PKG_DIR"
+cp -R `pwd` "$PKG_DIR"
 cd "$PKG_DIR"
+
+# The example imports go.uber.org, fix the import.
+sed -e 's/go.uber.org\/atomic/github.com\/uber-go\/atomic/' -i="" example_test.go
 
 make test
