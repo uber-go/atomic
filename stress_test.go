@@ -105,6 +105,15 @@ func TestStressUint64(t *testing.T) {
 	})
 }
 
+func TestStressFloat64(t *testing.T) {
+	var atom Float64
+	runStress(func() {
+		atom.Load()
+		atom.CAS(1.0, 0.1)
+		atom.Store(1.0)
+	})
+}
+
 func TestStressBool(t *testing.T) {
 	var atom Bool
 	runStress(func() {
