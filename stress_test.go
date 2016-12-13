@@ -22,116 +22,108 @@ package atomic
 
 import (
 	"runtime"
+	"sync"
 	"testing"
 )
 
-const _parallelism = 4
-const _iterations = 1000
+const (
+	_parallelism = 4
+	_iterations  = 1000
+)
 
-func TestStressInt32(t *testing.T) {
+func runStress(f func()) {
 	defer runtime.GOMAXPROCS(runtime.GOMAXPROCS(_parallelism))
-	atom := &Int32{0}
+
+	var wg sync.WaitGroup
+	wg.Add(_parallelism)
 	for i := 0; i < _parallelism; i++ {
 		go func() {
+			defer wg.Done()
 			for j := 0; j < _iterations; j++ {
-				atom.Load()
-				atom.Add(1)
-				atom.Sub(2)
-				atom.Inc()
-				atom.Dec()
-				atom.CAS(1, 0)
-				atom.Swap(5)
-				atom.Store(1)
+				f()
 			}
 		}()
 	}
+
+	wg.Wait()
+}
+
+func TestStressInt32(t *testing.T) {
+	var atom Int32
+	runStress(func() {
+		atom.Load()
+		atom.Add(1)
+		atom.Sub(2)
+		atom.Inc()
+		atom.Dec()
+		atom.CAS(1, 0)
+		atom.Swap(5)
+		atom.Store(1)
+	})
 }
 
 func TestStressInt64(t *testing.T) {
-	defer runtime.GOMAXPROCS(runtime.GOMAXPROCS(_parallelism))
-	atom := &Int64{0}
-	for i := 0; i < _parallelism; i++ {
-		go func() {
-			for j := 0; j < _iterations; j++ {
-				atom.Load()
-				atom.Add(1)
-				atom.Sub(2)
-				atom.Inc()
-				atom.Dec()
-				atom.CAS(1, 0)
-				atom.Swap(5)
-				atom.Store(1)
-			}
-		}()
-	}
+	var atom Int64
+	runStress(func() {
+		atom.Load()
+		atom.Add(1)
+		atom.Sub(2)
+		atom.Inc()
+		atom.Dec()
+		atom.CAS(1, 0)
+		atom.Swap(5)
+		atom.Store(1)
+
+	})
 }
 
 func TestStressUint32(t *testing.T) {
-	defer runtime.GOMAXPROCS(runtime.GOMAXPROCS(_parallelism))
-	atom := &Uint32{0}
-	for i := 0; i < _parallelism; i++ {
-		go func() {
-			for j := 0; j < _iterations; j++ {
-				atom.Load()
-				atom.Add(1)
-				atom.Sub(2)
-				atom.Inc()
-				atom.Dec()
-				atom.CAS(1, 0)
-				atom.Swap(5)
-				atom.Store(1)
-			}
-		}()
-	}
+	var atom Uint32
+	runStress(func() {
+		atom.Load()
+		atom.Add(1)
+		atom.Sub(2)
+		atom.Inc()
+		atom.Dec()
+		atom.CAS(1, 0)
+		atom.Swap(5)
+		atom.Store(1)
+	})
 }
 
 func TestStressUint64(t *testing.T) {
-	defer runtime.GOMAXPROCS(runtime.GOMAXPROCS(_parallelism))
-	atom := &Uint64{0}
-	for i := 0; i < _parallelism; i++ {
-		go func() {
-			for j := 0; j < _iterations; j++ {
-				atom.Load()
-				atom.Add(1)
-				atom.Sub(2)
-				atom.Inc()
-				atom.Dec()
-				atom.CAS(1, 0)
-				atom.Swap(5)
-				atom.Store(1)
-			}
-		}()
-	}
+	var atom Uint64
+	runStress(func() {
+		atom.Load()
+		atom.Add(1)
+		atom.Sub(2)
+		atom.Inc()
+		atom.Dec()
+		atom.CAS(1, 0)
+		atom.Swap(5)
+		atom.Store(1)
+	})
 }
 
 func TestStressBool(t *testing.T) {
-	defer runtime.GOMAXPROCS(runtime.GOMAXPROCS(_parallelism))
-	atom := NewBool(false)
-	for i := 0; i < _parallelism; i++ {
-		go func() {
-			for j := 0; j < _iterations; j++ {
-				atom.Load()
-				atom.Store(false)
-				atom.Swap(true)
-				atom.Load()
-				atom.Toggle()
-				atom.Toggle()
-			}
-		}()
-	}
+	var atom Bool
+	runStress(func() {
+		atom.Load()
+		atom.Store(false)
+		atom.Swap(true)
+		atom.Load()
+		atom.Toggle()
+		atom.Toggle()
+	})
 }
 
 func TestStressString(t *testing.T) {
-	defer runtime.GOMAXPROCS(runtime.GOMAXPROCS(_parallelism))
-	atom := NewString("")
-	for i := 0; i < _parallelism; i++ {
-		go func() {
-			for j := 0; j < _iterations; j++ {
-				atom.Load()
-				atom.Store("abc")
-				atom.Load()
-				atom.Store("def")
-			}
-		}()
-	}
+	var atom String
+	runStress(func() {
+		atom.Load()
+		atom.Store("abc")
+		atom.Load()
+		atom.Store("def")
+
+	})
 }
