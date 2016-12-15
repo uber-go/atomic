@@ -128,4 +128,6 @@ func TestFloat64(t *testing.T) {
 
 	atom.Store(42.0)
 	require.Equal(t, float64(42.0), atom.Load(), "Store didn't set the correct value.")
+	require.Equal(t, float64(42.5), atom.Add(0.5), "Add didn't work.")
+	require.Equal(t, float64(42.0), atom.Sub(0.5), "Sub didn't work.")
 }

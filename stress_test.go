@@ -110,6 +110,8 @@ func TestStressFloat64(t *testing.T) {
 	runStress(func() {
 		atom.Load()
 		atom.CAS(1.0, 0.1)
+		atom.Add(1.1)
+		atom.Sub(0.2)
 		atom.Store(1.0)
 	})
 }
