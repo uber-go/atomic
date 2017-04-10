@@ -298,3 +298,7 @@ func (f *Float64) Sub(s float64) float64 {
 func (f *Float64) CAS(old, new float64) bool {
 	return atomic.CompareAndSwapUint64(&f.v, math.Float64bits(old), math.Float64bits(new))
 }
+
+// Value shadows the type of the same name from sync/atomic
+// https://godoc.org/sync/atomic#Value
+type Value struct{ atomic.Value }
