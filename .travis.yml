@@ -9,6 +9,12 @@ go:
   - 1.8
   - tip
 
+matrix:
+  allow_failures:
+    - go: tip
+    - go: 1.5
+    - go: 1.6
+
 cache:
   directories:
     - vendor
