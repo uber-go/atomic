@@ -40,4 +40,7 @@ func TestString(t *testing.T) {
 
 	atom = NewString("bcd")
 	require.Equal(t, "bcd", atom.Load(), "Expected Load to return initialized value")
+
+	atom.Store("")
+	require.Equal(t, "", atom.Load(), "Expected Load to return empty value")
 }
