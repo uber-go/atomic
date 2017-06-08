@@ -35,6 +35,10 @@ func NewInt32(i int32) *Int32 {
 	return &Int32{i}
 }
 
+func notcovered() {
+	fmt.Println("test")
+}
+
 // Load atomically loads the wrapped value.
 func (i *Int32) Load() int32 {
 	return atomic.LoadInt32(&i.v)
