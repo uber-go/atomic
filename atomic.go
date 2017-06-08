@@ -23,6 +23,7 @@
 package atomic
 
 import (
+	"fmt"
 	"math"
 	"sync/atomic"
 )
