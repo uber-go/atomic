@@ -23,6 +23,7 @@
 package atomic
 
 import (
+	"fmt"
 	"math"
 	"sync/atomic"
 )
@@ -33,6 +34,10 @@ type Int32 struct{ v int32 }
 // NewInt32 creates an Int32.
 func NewInt32(i int32) *Int32 {
 	return &Int32{i}
+}
+
+func notcovered() {
+	fmt.Println("test")
 }
 
 // Load atomically loads the wrapped value.
