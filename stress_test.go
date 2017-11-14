@@ -145,7 +145,6 @@ func stressFloat64() func() {
 
 func stressBool() func() {
 	var atom Bool
-
 	return func() {
 		atom.Load()
 		atom.Store(false)
