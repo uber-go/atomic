@@ -31,7 +31,7 @@ const (
 	_iterations  = 1000
 )
 
-var _stressTests = map[string]func(){
+var _stressTests = map[string]func() func(){
 	"i32":    stressInt32,
 	"i64":    stressInt64,
 	"u32":    stressUint32,
@@ -42,13 +42,14 @@ var _stressTests = map[string]func(){
 }
 
 func TestStress(t *testing.T) {
-	for name, f := range _stressTests {
+	for name, ff := range _stressTests {
 		t.Run(name, func(t *testing.T) {
 			defer runtime.GOMAXPROCS(runtime.GOMAXPROCS(_parallelism))
 
 			start := make(chan struct{})
 			var wg sync.WaitGroup
 			wg.Add(_parallelism)
+			f := ff()
 			for i := 0; i < _parallelism; i++ {
 				go func() {
 					defer wg.Done()
@@ -65,8 +66,9 @@ func TestStress(t *testing.T) {
 }
 
 func BenchmarkStress(b *testing.B) {
-	for name, f := range _stressTests {
+	for name, ff := range _stressTests {
 		b.Run(name, func(b *testing.B) {
+			f := ff()
 			for i := 0; i < b.N; i++ {
 				f()
 			}
@@ -74,81 +76,96 @@ func BenchmarkStress(b *testing.B) {
 	}
 }
 
-func stressInt32() {
+func stressInt32() func() {
 	var atom Int32
-	atom.Load()
-	atom.Add(1)
-	atom.Sub(2)
-	atom.Inc()
-	atom.Dec()
-	atom.CAS(1, 0)
-	atom.Swap(5)
-	atom.Store(1)
+	return func() {
+		atom.Load()
+		atom.Add(1)
+		atom.Sub(2)
+		atom.Inc()
+		atom.Dec()
+		atom.CAS(1, 0)
+		atom.Swap(5)
+		atom.Store(1)
+	}
 }
 
-func stressInt64() {
+func stressInt64() func() {
 	var atom Int64
-	atom.Load()
-	atom.Add(1)
-	atom.Sub(2)
-	atom.Inc()
-	atom.Dec()
-	atom.CAS(1, 0)
-	atom.Swap(5)
-	atom.Store(1)
+	return func() {
+		atom.Load()
+		atom.Add(1)
+		atom.Sub(2)
+		atom.Inc()
+		atom.Dec()
+		atom.CAS(1, 0)
+		atom.Swap(5)
+		atom.Store(1)
+	}
 }
 
-func stressUint32() {
+func stressUint32() func() {
 	var atom Uint32
-	atom.Load()
-	atom.Add(1)
-	atom.Sub(2)
-	atom.Inc()
-	atom.Dec()
-	atom.CAS(1, 0)
-	atom.Swap(5)
-	atom.Store(1)
+	return func() {
+		atom.Load()
+		atom.Add(1)
+		atom.Sub(2)
+		atom.Inc()
+		atom.Dec()
+		atom.CAS(1, 0)
+		atom.Swap(5)
+		atom.Store(1)
+	}
 }
 
-func stressUint64() {
+func stressUint64() func() {
 	var atom Uint64
-	atom.Load()
-	atom.Add(1)
-	atom.Sub(2)
-	atom.Inc()
-	atom.Dec()
-	atom.CAS(1, 0)
-	atom.Swap(5)
-	atom.Store(1)
+	return func() {
+		atom.Load()
+		atom.Add(1)
+		atom.Sub(2)
+		atom.Inc()
+		atom.Dec()
+		atom.CAS(1, 0)
+		atom.Swap(5)
+		atom.Store(1)
+	}
 }
 
-func stressFloat64() {
+func stressFloat64() func() {
 	var atom Float64
-	atom.Load()
-	atom.CAS(1.0, 0.1)
-	atom.Add(1.1)
-	atom.Sub(0.2)
-	atom.Store(1.0)
+	return func() {
+		atom.Load()
+		atom.CAS(1.0, 0.1)
+		atom.Add(1.1)
+		atom.Sub(0.2)
+		atom.Store(1.0)
+	}
 }
 
-func stressBool() {
+func stressBool() func() {
 	var atom Bool
-	atom.Load()
-	atom.Store(false)
-	atom.Swap(true)
-	atom.CAS(true, false)
-	atom.CAS(true, false)
-	atom.Load()
-	atom.Toggle()
-	atom.Toggle()
+
+	return func() {
+		atom.Load()
+		atom.Store(false)
+		atom.Swap(true)
+		atom.CAS(true, false)
+		atom.CAS(true, false)
+		atom.Load()
+		atom.Toggle()
+		atom.Toggle()
+	}
 }
 
-func stressString() {
+func stressString() func() {
 	var atom String
-	atom.Load()
-	atom.Store("abc")
-	atom.Load()
-	atom.Store("def")
-	atom.Load()
-	atom.Store("")
+	return func() {
+		atom.Load()
+		atom.Store("abc")
+		atom.Load()
+		atom.Store("def")
+		atom.Load()
+		atom.Store("")
+	}
 }
