@@ -45,9 +45,5 @@ func (s *String) Load() string {
 // Note: Converting the string to an interface{} to store in the Value
 // requires an allocation.
 func (s *String) Store(str string) {
-	if str == "" {
-		s.v = Value{}
-		return
-	}
 	s.v.Store(str)
 }
