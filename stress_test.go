@@ -69,9 +69,20 @@ func BenchmarkStress(b *testing.B) {
 	for name, ff := range _stressTests {
 		b.Run(name, func(b *testing.B) {
 			f := ff()
-			for i := 0; i < b.N; i++ {
-				f()
-			}
+
+			b.Run("serial", func(b *testing.B) {
+				for i := 0; i < b.N; i++ {
+					f()
+				}
+			})
+
+			b.Run("parallel", func(b *testing.B) {
+				b.RunParallel(func(pb *testing.PB) {
+					for pb.Next() {
+						f()
+					}
+				})
+			})
 		})
 	}
 }
