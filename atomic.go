@@ -20,7 +20,7 @@
 
 // Package atomic provides simple wrappers around numerics to enforce atomic
 // access.
-package atomic
+package atomic // import "go.uber.org/atomic"
 
 import (
 	"math"
