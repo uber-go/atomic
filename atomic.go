@@ -25,6 +25,7 @@ package atomic
 import (
 	"math"
 	"sync/atomic"
+	"time"
 )
 
 // Int32 is an atomic wrapper around an int32.
@@ -302,6 +303,27 @@ func (f *Float64) Sub(s float64) float64 {
 // CAS is an atomic compare-and-swap.
 func (f *Float64) CAS(old, new float64) bool {
 	return atomic.CompareAndSwapUint64(&f.v, math.Float64bits(old), math.Float64bits(new))
+}
+
+// Duration is an atomic wrapper around time.Duration
+// https://godoc.org/time#Duration
+type Duration struct {
+	v *Int64
+}
+
+// NewDuration creates a Duration.
+func NewDuration(d time.Duration) *Duration {
+	return &Duration{v: NewInt64(int64(d))}
+}
+
+// Load atomically loads the wrapped value.
+func (d *Duration) Load() time.Duration {
+	return time.Duration(d.v.Load())
+}
+
+// Store atomically stores the passed value.
+func (d *Duration) Store(s time.Duration) {
+	d.v.Store(int64(s))
 }
 
 // Value shadows the type of the same name from sync/atomic

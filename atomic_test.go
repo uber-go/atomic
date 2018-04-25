@@ -22,6 +22,7 @@ package atomic
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -138,6 +139,13 @@ func TestFloat64(t *testing.T) {
 	require.Equal(t, float64(42.0), atom.Load(), "Store didn't set the correct value.")
 	require.Equal(t, float64(42.5), atom.Add(0.5), "Add didn't work.")
 	require.Equal(t, float64(42.0), atom.Sub(0.5), "Sub didn't work.")
+}
+
+func TestDuration(t *testing.T) {
+	atom := NewDuration(5 * time.Minute)
+	require.Equal(t, 5*time.Minute, atom.Load(), "Load didn't work.")
+	atom.Store(10 * time.Minute)
+	require.Equal(t, 10*time.Minute, atom.Load(), "Store didn't set the correct value.")
 }
 
 func TestValue(t *testing.T) {
