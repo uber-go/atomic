@@ -308,22 +308,42 @@ func (f *Float64) CAS(old, new float64) bool {
 // Duration is an atomic wrapper around time.Duration
 // https://godoc.org/time#Duration
 type Duration struct {
-	v *Int64
+	v int64
 }
 
 // NewDuration creates a Duration.
 func NewDuration(d time.Duration) *Duration {
-	return &Duration{v: NewInt64(int64(d))}
+	return &Duration{v: int64(d)}
 }
 
 // Load atomically loads the wrapped value.
 func (d *Duration) Load() time.Duration {
-	return time.Duration(d.v.Load())
+	return time.Duration(atomic.LoadInt64(&d.v))
 }
 
 // Store atomically stores the passed value.
-func (d *Duration) Store(s time.Duration) {
-	d.v.Store(int64(s))
+func (d *Duration) Store(n time.Duration) {
+	atomic.StoreInt64(&d.v, int64(n))
+}
+
+// Add atomically adds to the wrapped time.Duration and returns the new value.
+func (d *Duration) Add(n time.Duration) time.Duration {
+	return time.Duration(atomic.AddInt64(&d.v, int64(n)))
+}
+
+// Sub atomically subtracts from the wrapped time.Duration and returns the new value.
+func (d *Duration) Sub(n time.Duration) time.Duration {
+	return time.Duration(atomic.AddInt64(&d.v, -int64(n)))
+}
+
+// Swap atomically swaps the wrapped time.Duration and returns the old value.
+func (d *Duration) Swap(n time.Duration) time.Duration {
+	return time.Duration(atomic.SwapInt64(&d.v, int64(n)))
+}
+
+// CAS is an atomic compare-and-swap.
+func (d *Duration) CAS(old, new time.Duration) bool {
+	return atomic.CompareAndSwapInt64(&d.v, int64(old), int64(new))
 }
 
 // Value shadows the type of the same name from sync/atomic
