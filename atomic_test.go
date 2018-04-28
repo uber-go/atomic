@@ -21,7 +21,9 @@
 package atomic
 
 import (
+	"sync/atomic"
 	"testing"
+	"unsafe"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -151,4 +153,14 @@ func TestValue(t *testing.T) {
 	assert.Equal(t, 84, v.Load())
 
 	assert.Panics(t, func() { v.Store("foo") })
+}
+
+func TestSize(t *testing.T) {
+	assert.Equal(t, unsafe.Sizeof(Int32{}), unsafe.Sizeof(int32(0)))
+	assert.Equal(t, unsafe.Sizeof(Int64{}), unsafe.Sizeof(int64(0)))
+	assert.Equal(t, unsafe.Sizeof(Uint32{}), unsafe.Sizeof(uint32(0)))
+	assert.Equal(t, unsafe.Sizeof(Uint64{}), unsafe.Sizeof(uint64(0)))
+	assert.Equal(t, unsafe.Sizeof(Bool{}), unsafe.Sizeof(uint32(0)))
+	assert.Equal(t, unsafe.Sizeof(Float64{}), unsafe.Sizeof(float64(0)))
+	assert.Equal(t, unsafe.Sizeof(Value{}), unsafe.Sizeof(atomic.Value{}))
 }

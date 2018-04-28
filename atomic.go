@@ -28,11 +28,14 @@ import (
 )
 
 // Int32 is an atomic wrapper around an int32.
-type Int32 struct{ v int32 }
+type Int32 struct {
+	noCopy
+	v int32
+}
 
 // NewInt32 creates an Int32.
 func NewInt32(i int32) *Int32 {
-	return &Int32{i}
+	return &Int32{v: i}
 }
 
 // Load atomically loads the wrapped value.
@@ -76,11 +79,14 @@ func (i *Int32) Swap(n int32) int32 {
 }
 
 // Int64 is an atomic wrapper around an int64.
-type Int64 struct{ v int64 }
+type Int64 struct {
+	noCopy
+	v int64
+}
 
 // NewInt64 creates an Int64.
 func NewInt64(i int64) *Int64 {
-	return &Int64{i}
+	return &Int64{v: i}
 }
 
 // Load atomically loads the wrapped value.
@@ -124,11 +130,14 @@ func (i *Int64) Swap(n int64) int64 {
 }
 
 // Uint32 is an atomic wrapper around an uint32.
-type Uint32 struct{ v uint32 }
+type Uint32 struct {
+	noCopy
+	v uint32
+}
 
 // NewUint32 creates a Uint32.
 func NewUint32(i uint32) *Uint32 {
-	return &Uint32{i}
+	return &Uint32{v: i}
 }
 
 // Load atomically loads the wrapped value.
@@ -172,11 +181,14 @@ func (i *Uint32) Swap(n uint32) uint32 {
 }
 
 // Uint64 is an atomic wrapper around a uint64.
-type Uint64 struct{ v uint64 }
+type Uint64 struct {
+	noCopy
+	v uint64
+}
 
 // NewUint64 creates a Uint64.
 func NewUint64(i uint64) *Uint64 {
-	return &Uint64{i}
+	return &Uint64{v: i}
 }
 
 // Load atomically loads the wrapped value.
@@ -220,11 +232,14 @@ func (i *Uint64) Swap(n uint64) uint64 {
 }
 
 // Bool is an atomic Boolean.
-type Bool struct{ v uint32 }
+type Bool struct {
+	noCopy
+	v uint32
+}
 
 // NewBool creates a Bool.
 func NewBool(initial bool) *Bool {
-	return &Bool{boolToInt(initial)}
+	return &Bool{v: boolToInt(initial)}
 }
 
 // Load atomically loads the Boolean.
@@ -265,12 +280,13 @@ func boolToInt(b bool) uint32 {
 
 // Float64 is an atomic wrapper around float64.
 type Float64 struct {
+	noCopy
 	v uint64
 }
 
 // NewFloat64 creates a Float64.
 func NewFloat64(f float64) *Float64 {
-	return &Float64{math.Float64bits(f)}
+	return &Float64{v: math.Float64bits(f)}
 }
 
 // Load atomically loads the wrapped value.
@@ -306,4 +322,15 @@ func (f *Float64) CAS(old, new float64) bool {
 
 // Value shadows the type of the same name from sync/atomic
 // https://godoc.org/sync/atomic#Value
-type Value struct{ atomic.Value }
+type Value struct {
+	noCopy
+	atomic.Value
+}
+
+// Embed this type into a struct, which mustn't be copied,
+// so `go vet` gives a warning if this struct is copied.
+//
+// See https://github.com/golang/go/issues/8005#issuecomment-190753527 for details.
+type noCopy struct{}
+
+func (*noCopy) Lock() {}
