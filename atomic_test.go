@@ -164,3 +164,7 @@ func TestSize(t *testing.T) {
 	assert.Equal(t, unsafe.Sizeof(Float64{}), unsafe.Sizeof(float64(0)))
 	assert.Equal(t, unsafe.Sizeof(Value{}), unsafe.Sizeof(atomic.Value{}))
 }
+
+func init() {
+	(&noCopy{}).Lock() // make linter happy.
+}
