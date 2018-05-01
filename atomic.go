@@ -308,12 +308,12 @@ func (f *Float64) CAS(old, new float64) bool {
 // Duration is an atomic wrapper around time.Duration
 // https://godoc.org/time#Duration
 type Duration struct {
-	v *Int64
+	v Int64
 }
 
 // NewDuration creates a Duration.
 func NewDuration(d time.Duration) *Duration {
-	return &Duration{v: NewInt64(int64(d))}
+	return &Duration{v: *NewInt64(int64(d))}
 }
 
 // Load atomically loads the wrapped value.
