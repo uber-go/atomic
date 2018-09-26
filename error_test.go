@@ -35,10 +35,6 @@ func TestErrorByValue(t *testing.T) {
 func TestNewErrorWithNilArgument(t *testing.T) {
 	err := NewError(nil)
 	require.Nil(t, err.Load(), "Initial value shall be nil")
-
-	err = &Error{}
-	err.Store(nil)
-	require.Nil(t, err.Load(), "Initial value shall be nil")
 }
 
 func TestErrorCanStoreNil(t *testing.T) {
@@ -52,8 +48,8 @@ func TestNewErrorWithError(t *testing.T) {
 	err2 := errors.New("hello2")
 
 	atom := NewError(err1)
-	require.Equal(t, err1.Error(), atom.Load().Error(), "Expected Load to return initialized value")
+	require.Equal(t, err1, atom.Load(), "Expected Load to return initialized value")
 
-	atom = NewError(err2)
-	require.Equal(t, err2.Error(), atom.Load().Error(), "Expected Load to return overridden value")
+	atom.Store(err2)
+	require.Equal(t, err2, atom.Load(), "Expected Load to return overridden value")
 }
