@@ -38,7 +38,7 @@ install_ci: install
 	go get github.com/mattn/goveralls
 	go get golang.org/x/tools/cmd/cover
 ifdef SHOULD_LINT
-	go get github.com/golang/lint/golint
+	go get golang.org/x/lint/golint
 endif
 
 .PHONY: lint
