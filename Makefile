@@ -40,7 +40,7 @@ lint:
 	@echo "Checking vet..."
 	@go vet ./... 2>&1 | tee -a lint.log;)
 	@echo "Checking lint..."
-	@golint . 2>&1 | tee -a lint.log;)
+	@golint $(go list ./...) 2>&1 | tee -a lint.log;)
 	@echo "Checking for unresolved FIXMEs..."
 	@git grep -i fixme | grep -v -e vendor -e Makefile | tee -a lint.log
 	@[ ! -s lint.log ]
