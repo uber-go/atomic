@@ -1,4 +1,3 @@
-PACKAGES := $(shell glide nv)
 # Many Go tools take file globs or directories as arguments instead of packages.
 PACKAGE_FILES ?= *.go
 
@@ -8,7 +7,7 @@ export GO15VENDOREXPERIMENT=1
 
 .PHONY: build
 build:
-	go build -i $(PACKAGES)
+	go build -i ./...
 
 
 .PHONY: install
@@ -19,7 +18,7 @@ install:
 
 .PHONY: test
 test:
-	go test -cover -race $(PACKAGES)
+	go test -cover -race ./...
 
 
 .PHONY: install_ci
@@ -39,9 +38,9 @@ lint:
 	@echo "Checking formatting..."
 	@gofmt -d -s $(PACKAGE_FILES) 2>&1 | tee lint.log
 	@echo "Checking vet..."
-	@$(foreach dir,$(PACKAGE_FILES),go tool vet $(dir) 2>&1 | tee -a lint.log;)
+	@go vet ./... 2>&1 | tee -a lint.log;)
 	@echo "Checking lint..."
-	@$(foreach dir,$(PKGS),golint $(dir) 2>&1 | tee -a lint.log;)
+	@golint . 2>&1 | tee -a lint.log;)
 	@echo "Checking for unresolved FIXMEs..."
 	@git grep -i fixme | grep -v -e vendor -e Makefile | tee -a lint.log
 	@[ ! -s lint.log ]

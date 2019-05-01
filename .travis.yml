@@ -3,16 +3,12 @@ language: go
 go_import_path: go.uber.org/atomic
 
 go:
-  - 1.7.x
-  - 1.8.x
-  - 1.9.x
-  - 1.10.x
   - 1.11.x
-  - 1.x # latest release
+  - 1.12.x
 
 matrix:
   include:
-  - go: 1.11.x
+  - go: 1.12.x
     env: NO_TEST=yes LINT=yes
 
 cache:
