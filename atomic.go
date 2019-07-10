@@ -84,9 +84,8 @@ func (i *Int64) xAddr() *int64 {
 	// The return must be 8-byte aligned.
 	if uintptr(unsafe.Pointer(&i.v))%8 == 0 {
 		return (*int64)(unsafe.Pointer(&i.v))
-	} else {
-		return (*int64)(unsafe.Pointer(&i.v[1]))
 	}
+	return (*int64)(unsafe.Pointer(&i.v[1]))
 }
 
 // NewInt64 creates an Int64.
@@ -197,9 +196,8 @@ func (i *Uint64) xAddr() *uint64 {
 	// Return pointer to 8-byte aligned address.
 	if uintptr(unsafe.Pointer(&i.v))%8 == 0 {
 		return (*uint64)(unsafe.Pointer(&i.v))
-	} else {
-		return (*uint64)(unsafe.Pointer(&i.v[1]))
 	}
+	return (*uint64)(unsafe.Pointer(&i.v[1]))
 }
 
 // NewUint64 creates a Uint64.
