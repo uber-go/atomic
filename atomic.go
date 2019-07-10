@@ -26,6 +26,7 @@ import (
 	"math"
 	"sync/atomic"
 	"time"
+	"unsafe"
 )
 
 // Int32 is an atomic wrapper around an int32.
@@ -77,26 +78,40 @@ func (i *Int32) Swap(n int32) int32 {
 }
 
 // Int64 is an atomic wrapper around an int64.
-type Int64 struct{ v int64 }
+type Int64 struct{ v [3]int32 }
+
+func (i *Int64) xAddr() *int64 {
+	// The return must be 8-byte aligned.
+	if uintptr(unsafe.Pointer(&i.v))%8 == 0 {
+		return (*int64)(unsafe.Pointer(&i.v))
+	} else {
+		return (*int64)(unsafe.Pointer(&i.v[1]))
+	}
+}
 
 // NewInt64 creates an Int64.
 func NewInt64(i int64) *Int64 {
-	return &Int64{i}
+	ret := &Int64{[3]int32{0, 0, 0}}
+	*ret.xAddr() = i
+	return ret
 }
 
 // Load atomically loads the wrapped value.
 func (i *Int64) Load() int64 {
-	return atomic.LoadInt64(&i.v)
+	p := i.xAddr()
+	return atomic.LoadInt64(p)
 }
 
 // Add atomically adds to the wrapped int64 and returns the new value.
 func (i *Int64) Add(n int64) int64 {
-	return atomic.AddInt64(&i.v, n)
+	p := i.xAddr()
+	return atomic.AddInt64(p, n)
 }
 
 // Sub atomically subtracts from the wrapped int64 and returns the new value.
 func (i *Int64) Sub(n int64) int64 {
-	return atomic.AddInt64(&i.v, -n)
+	p := i.xAddr()
+	return atomic.AddInt64(p, -n)
 }
 
 // Inc atomically increments the wrapped int64 and returns the new value.
@@ -111,17 +126,20 @@ func (i *Int64) Dec() int64 {
 
 // CAS is an atomic compare-and-swap.
 func (i *Int64) CAS(old, new int64) bool {
-	return atomic.CompareAndSwapInt64(&i.v, old, new)
+	p := i.xAddr()
+	return atomic.CompareAndSwapInt64(p, old, new)
 }
 
 // Store atomically stores the passed value.
 func (i *Int64) Store(n int64) {
-	atomic.StoreInt64(&i.v, n)
+	p := i.xAddr()
+	atomic.StoreInt64(p, n)
 }
 
 // Swap atomically swaps the wrapped int64 and returns the old value.
 func (i *Int64) Swap(n int64) int64 {
-	return atomic.SwapInt64(&i.v, n)
+	p := i.xAddr()
+	return atomic.SwapInt64(p, n)
 }
 
 // Uint32 is an atomic wrapper around an uint32.
@@ -173,26 +191,40 @@ func (i *Uint32) Swap(n uint32) uint32 {
 }
 
 // Uint64 is an atomic wrapper around a uint64.
-type Uint64 struct{ v uint64 }
+type Uint64 struct{ v [3]int32 }
+
+func (i *Uint64) xAddr() *uint64 {
+	// Return pointer to 8-byte aligned address.
+	if uintptr(unsafe.Pointer(&i.v))%8 == 0 {
+		return (*uint64)(unsafe.Pointer(&i.v))
+	} else {
+		return (*uint64)(unsafe.Pointer(&i.v[1]))
+	}
+}
 
 // NewUint64 creates a Uint64.
 func NewUint64(i uint64) *Uint64 {
-	return &Uint64{i}
+	ret := &Uint64{[3]int32{0, 0, 0}}
+	*ret.xAddr() = i
+	return ret
 }
 
 // Load atomically loads the wrapped value.
 func (i *Uint64) Load() uint64 {
-	return atomic.LoadUint64(&i.v)
+	p := i.xAddr()
+	return atomic.LoadUint64(p)
 }
 
 // Add atomically adds to the wrapped uint64 and returns the new value.
 func (i *Uint64) Add(n uint64) uint64 {
-	return atomic.AddUint64(&i.v, n)
+	p := i.xAddr()
+	return atomic.AddUint64(p, n)
 }
 
 // Sub atomically subtracts from the wrapped uint64 and returns the new value.
 func (i *Uint64) Sub(n uint64) uint64 {
-	return atomic.AddUint64(&i.v, ^(n - 1))
+	p := i.xAddr()
+	return atomic.AddUint64(p, ^(n - 1))
 }
 
 // Inc atomically increments the wrapped uint64 and returns the new value.
@@ -207,17 +239,20 @@ func (i *Uint64) Dec() uint64 {
 
 // CAS is an atomic compare-and-swap.
 func (i *Uint64) CAS(old, new uint64) bool {
-	return atomic.CompareAndSwapUint64(&i.v, old, new)
+	p := i.xAddr()
+	return atomic.CompareAndSwapUint64(p, old, new)
 }
 
 // Store atomically stores the passed value.
 func (i *Uint64) Store(n uint64) {
-	atomic.StoreUint64(&i.v, n)
+	p := i.xAddr()
+	atomic.StoreUint64(p, n)
 }
 
 // Swap atomically swaps the wrapped uint64 and returns the old value.
 func (i *Uint64) Swap(n uint64) uint64 {
-	return atomic.SwapUint64(&i.v, n)
+	p := i.xAddr()
+	return atomic.SwapUint64(p, n)
 }
 
 // Bool is an atomic Boolean.

@@ -4,6 +4,7 @@ PACKAGE_FILES ?= *.go
 # For pre go1.6
 export GO15VENDOREXPERIMENT=1
 
+ARCHBITS := $(shell getconf LONG_BIT)
 
 .PHONY: build
 build:
@@ -18,7 +19,11 @@ install:
 
 .PHONY: test
 test:
+ifeq ($(ARCHBITS),64) 
 	go test -cover -race ./...
+else
+	go test -cover ./...
+endif
 
 
 .PHONY: install_ci
