@@ -286,13 +286,13 @@ func (f *Float64) Store(s float64) {
 
 // Add atomically adds to the wrapped float64 and returns the new value.
 func (f *Float64) Add(s float64) float64 {
-	for {
-		old := f.Load()
-		new := old + s
-		if f.CAS(old, new) {
-			return new
-		}
+tryCAS:
+	old := f.Load()
+	new := old + s
+	if f.CAS(old, new) {
+		return new
 	}
+	goto tryCAS
 }
 
 // Sub atomically subtracts from the wrapped float64 and returns the new value.
