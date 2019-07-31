@@ -38,7 +38,7 @@ lint:
 	@echo "Checking formatting..."
 	@gofmt -d -s $(PACKAGE_FILES) 2>&1 | tee lint.log
 	@echo "Checking vet..."
-	@go vet ./... 2>&1 | tee -a lint.log;)
+	@go vet ./... 2>&1 | tee -a lint.log
 	@echo "Checking lint..."
 	@golint $$(go list ./...) 2>&1 | tee -a lint.log
 	@echo "Checking for unresolved FIXMEs..."
