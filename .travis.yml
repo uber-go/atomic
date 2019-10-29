@@ -20,10 +20,8 @@ before_install:
   - go version
 
 script:
-  - |
-    set -e
-    test -z "$LINT" || make lint
-    make cover
+  - test -z "$LINT" || make lint
+  - make cover
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
