@@ -25,7 +25,5 @@ script:
     test -z "$LINT" || make lint
     make cover
 
-    scripts/test-ubergo.sh
-
 after_success:
   - bash <(curl -s https://codecov.io/bash)
