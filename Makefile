@@ -17,7 +17,7 @@ test:
 gofmt:
 	$(eval FMT_LOG := $(shell mktemp -t gofmt.XXXXX))
 	gofmt -e -s -l $(GO_FILES) > $(FMT_LOG) || true
-	@[ ! -s "$(FMT_LOG)" ] || (echo "gofmt failed:" | cat - $(FMT_LOG) && false)
+	@[ ! -s "$(FMT_LOG)" ] || (echo "gofmt failed:" && cat $(FMT_LOG) && false)
 
 $(GOLINT):
 	go install golang.org/x/lint/golint
