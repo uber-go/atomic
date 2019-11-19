@@ -106,7 +106,9 @@ func TestUint64(t *testing.T) {
 
 func TestBool(t *testing.T) {
 	atom := NewBool(false)
-	require.False(t, atom.Toggle(), "Expected swap to return previous value.")
+	require.False(t, atom.Toggle(), "Expected Toggle to return previous value.")
+	require.True(t, atom.Toggle(), "Expected Toggle to return previous value.")
+	require.False(t, atom.Toggle(), "Expected Toggle to return previous value.")
 	require.True(t, atom.Load(), "Unexpected state after swap.")
 
 	require.True(t, atom.CAS(true, true), "CAS should swap when old matches")
