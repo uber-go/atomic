@@ -23,6 +23,7 @@
 package atomic
 
 import (
+	"encoding/json"
 	"math"
 	"sync/atomic"
 	"time"
@@ -76,6 +77,22 @@ func (i *Int32) Swap(n int32) int32 {
 	return atomic.SwapInt32(&i.v, n)
 }
 
+// MarshalJSON allows for json encoding of the wrapped int32
+func (i *Int32) MarshalJSON() ([]byte, error) {
+	return json.Marshal(i.Load())
+}
+
+// UnmarshalJSON allows for json decoding of the wrapped int32
+func (i *Int32) UnmarshalJSON(b []byte) error {
+	var v int32
+	err := json.Unmarshal(b, &v)
+	if err != nil {
+		return err
+	}
+	i.Store(v)
+	return nil
+}
+
 // Int64 is an atomic wrapper around an int64.
 type Int64 struct{ v int64 }
 
@@ -122,6 +139,22 @@ func (i *Int64) Store(n int64) {
 // Swap atomically swaps the wrapped int64 and returns the old value.
 func (i *Int64) Swap(n int64) int64 {
 	return atomic.SwapInt64(&i.v, n)
+}
+
+// MarshalJSON allows for json encoding of the wrapped int64
+func (i *Int64) MarshalJSON() ([]byte, error) {
+	return json.Marshal(i.Load())
+}
+
+// UnmarshalJSON allows for json decoding of the wrapped int64
+func (i *Int64) UnmarshalJSON(b []byte) error {
+	var v int64
+	err := json.Unmarshal(b, &v)
+	if err != nil {
+		return err
+	}
+	i.Store(v)
+	return nil
 }
 
 // Uint32 is an atomic wrapper around an uint32.
@@ -172,6 +205,22 @@ func (i *Uint32) Swap(n uint32) uint32 {
 	return atomic.SwapUint32(&i.v, n)
 }
 
+// MarshalJSON allows for json encoding of the wrapped uint32
+func (i *Uint32) MarshalJSON() ([]byte, error) {
+	return json.Marshal(i.Load())
+}
+
+// UnmarshalJSON allows for json decoding of the wrapped uint32
+func (i *Uint32) UnmarshalJSON(b []byte) error {
+	var v uint32
+	err := json.Unmarshal(b, &v)
+	if err != nil {
+		return err
+	}
+	i.Store(v)
+	return nil
+}
+
 // Uint64 is an atomic wrapper around a uint64.
 type Uint64 struct{ v uint64 }
 
@@ -218,6 +267,22 @@ func (i *Uint64) Store(n uint64) {
 // Swap atomically swaps the wrapped uint64 and returns the old value.
 func (i *Uint64) Swap(n uint64) uint64 {
 	return atomic.SwapUint64(&i.v, n)
+}
+
+// MarshalJSON allows for json encoding of the wrapped uint64
+func (i *Uint64) MarshalJSON() ([]byte, error) {
+	return json.Marshal(i.Load())
+}
+
+// UnmarshalJSON allows for json decoding of the wrapped uint64
+func (i *Uint64) UnmarshalJSON(b []byte) error {
+	var v uint64
+	err := json.Unmarshal(b, &v)
+	if err != nil {
+		return err
+	}
+	i.Store(v)
+	return nil
 }
 
 // Bool is an atomic Boolean.
@@ -269,6 +334,22 @@ func boolToInt(b bool) uint32 {
 	return 0
 }
 
+// MarshalJSON allows for json encoding of the wrapped float64
+func (b *Bool) MarshalJSON() ([]byte, error) {
+	return json.Marshal(b.Load())
+}
+
+// UnmarshalJSON allows for json decoding of the wrapped float64
+func (b *Bool) UnmarshalJSON(t []byte) error {
+	var v bool
+	err := json.Unmarshal(t, &v)
+	if err != nil {
+		return err
+	}
+	b.Store(v)
+	return nil
+}
+
 // Float64 is an atomic wrapper around float64.
 type Float64 struct {
 	v uint64
@@ -308,6 +389,22 @@ func (f *Float64) Sub(s float64) float64 {
 // CAS is an atomic compare-and-swap.
 func (f *Float64) CAS(old, new float64) bool {
 	return atomic.CompareAndSwapUint64(&f.v, math.Float64bits(old), math.Float64bits(new))
+}
+
+// MarshalJSON allows for json encoding of the wrapped float64
+func (f *Float64) MarshalJSON() ([]byte, error) {
+	return json.Marshal(f.Load())
+}
+
+// UnmarshalJSON allows for json decoding of the wrapped float64
+func (f *Float64) UnmarshalJSON(b []byte) error {
+	var v float64
+	err := json.Unmarshal(b, &v)
+	if err != nil {
+		return err
+	}
+	f.Store(v)
+	return nil
 }
 
 // Duration is an atomic wrapper around time.Duration
