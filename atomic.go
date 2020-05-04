@@ -85,8 +85,7 @@ func (i *Int32) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON allows for json decoding of the wrapped int32
 func (i *Int32) UnmarshalJSON(b []byte) error {
 	var v int32
-	err := json.Unmarshal(b, &v)
-	if err != nil {
+	if err := json.Unmarshal(b, &v); err != nil {
 		return err
 	}
 	i.Store(v)
@@ -149,8 +148,7 @@ func (i *Int64) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON allows for json decoding of the wrapped int64
 func (i *Int64) UnmarshalJSON(b []byte) error {
 	var v int64
-	err := json.Unmarshal(b, &v)
-	if err != nil {
+	if err := json.Unmarshal(b, &v); err != nil {
 		return err
 	}
 	i.Store(v)
@@ -213,8 +211,7 @@ func (i *Uint32) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON allows for json decoding of the wrapped uint32
 func (i *Uint32) UnmarshalJSON(b []byte) error {
 	var v uint32
-	err := json.Unmarshal(b, &v)
-	if err != nil {
+	if err := json.Unmarshal(b, &v); err != nil {
 		return err
 	}
 	i.Store(v)
@@ -277,8 +274,7 @@ func (i *Uint64) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON allows for json decoding of the wrapped uint64
 func (i *Uint64) UnmarshalJSON(b []byte) error {
 	var v uint64
-	err := json.Unmarshal(b, &v)
-	if err != nil {
+	if err := json.Unmarshal(b, &v); err != nil {
 		return err
 	}
 	i.Store(v)
@@ -334,16 +330,15 @@ func boolToInt(b bool) uint32 {
 	return 0
 }
 
-// MarshalJSON allows for json encoding of the wrapped float64
+// MarshalJSON allows for json encoding of the wrapped bool
 func (b *Bool) MarshalJSON() ([]byte, error) {
 	return json.Marshal(b.Load())
 }
 
-// UnmarshalJSON allows for json decoding of the wrapped float64
+// UnmarshalJSON allows for json decoding of the wrapped bool
 func (b *Bool) UnmarshalJSON(t []byte) error {
 	var v bool
-	err := json.Unmarshal(t, &v)
-	if err != nil {
+	if err := json.Unmarshal(t, &v); err != nil {
 		return err
 	}
 	b.Store(v)
@@ -399,8 +394,7 @@ func (f *Float64) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON allows for json decoding of the wrapped float64
 func (f *Float64) UnmarshalJSON(b []byte) error {
 	var v float64
-	err := json.Unmarshal(b, &v)
-	if err != nil {
+	if err := json.Unmarshal(b, &v); err != nil {
 		return err
 	}
 	f.Store(v)
