@@ -77,12 +77,12 @@ func (i *Int32) Swap(n int32) int32 {
 	return atomic.SwapInt32(&i.v, n)
 }
 
-// MarshalJSON allows for json encoding of the wrapped int32
+// MarshalJSON encodes the wrapped int32 into JSON.
 func (i *Int32) MarshalJSON() ([]byte, error) {
 	return json.Marshal(i.Load())
 }
 
-// UnmarshalJSON allows for json decoding of the wrapped int32
+// UnmarshalJSON decodes JSON into the wrapped int32.
 func (i *Int32) UnmarshalJSON(b []byte) error {
 	var v int32
 	if err := json.Unmarshal(b, &v); err != nil {
@@ -140,12 +140,12 @@ func (i *Int64) Swap(n int64) int64 {
 	return atomic.SwapInt64(&i.v, n)
 }
 
-// MarshalJSON allows for json encoding of the wrapped int64
+// MarshalJSON encodes the wrapped int64 into JSON.
 func (i *Int64) MarshalJSON() ([]byte, error) {
 	return json.Marshal(i.Load())
 }
 
-// UnmarshalJSON allows for json decoding of the wrapped int64
+// UnmarshalJSON decodes JSON into the wrapped int64.
 func (i *Int64) UnmarshalJSON(b []byte) error {
 	var v int64
 	if err := json.Unmarshal(b, &v); err != nil {
@@ -203,12 +203,12 @@ func (i *Uint32) Swap(n uint32) uint32 {
 	return atomic.SwapUint32(&i.v, n)
 }
 
-// MarshalJSON allows for json encoding of the wrapped uint32
+// MarshalJSON encodes the wrapped uint32 into JSON.
 func (i *Uint32) MarshalJSON() ([]byte, error) {
 	return json.Marshal(i.Load())
 }
 
-// UnmarshalJSON allows for json decoding of the wrapped uint32
+// UnmarshalJSON decodes JSON into the wrapped uint32.
 func (i *Uint32) UnmarshalJSON(b []byte) error {
 	var v uint32
 	if err := json.Unmarshal(b, &v); err != nil {
@@ -266,12 +266,12 @@ func (i *Uint64) Swap(n uint64) uint64 {
 	return atomic.SwapUint64(&i.v, n)
 }
 
-// MarshalJSON allows for json encoding of the wrapped uint64
+// MarshalJSON encodes the wrapped uint64 into JSON.
 func (i *Uint64) MarshalJSON() ([]byte, error) {
 	return json.Marshal(i.Load())
 }
 
-// UnmarshalJSON allows for json decoding of the wrapped uint64
+// UnmarshalJSON decodes JSON into the wrapped uint64.
 func (i *Uint64) UnmarshalJSON(b []byte) error {
 	var v uint64
 	if err := json.Unmarshal(b, &v); err != nil {
@@ -330,12 +330,12 @@ func boolToInt(b bool) uint32 {
 	return 0
 }
 
-// MarshalJSON allows for json encoding of the wrapped bool
+// MarshalJSON encodes the wrapped bool into JSON.
 func (b *Bool) MarshalJSON() ([]byte, error) {
 	return json.Marshal(b.Load())
 }
 
-// UnmarshalJSON allows for json decoding of the wrapped bool
+// UnmarshalJSON decodes JSON into the wrapped bool.
 func (b *Bool) UnmarshalJSON(t []byte) error {
 	var v bool
 	if err := json.Unmarshal(t, &v); err != nil {
@@ -386,12 +386,12 @@ func (f *Float64) CAS(old, new float64) bool {
 	return atomic.CompareAndSwapUint64(&f.v, math.Float64bits(old), math.Float64bits(new))
 }
 
-// MarshalJSON allows for json encoding of the wrapped float64
+// MarshalJSON encodes the wrapped float64 into JSON.
 func (f *Float64) MarshalJSON() ([]byte, error) {
 	return json.Marshal(f.Load())
 }
 
-// UnmarshalJSON allows for json decoding of the wrapped float64
+// UnmarshalJSON decodes JSON into the wrapped float64.
 func (f *Float64) UnmarshalJSON(b []byte) error {
 	var v float64
 	if err := json.Unmarshal(b, &v); err != nil {
