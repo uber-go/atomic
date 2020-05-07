@@ -56,7 +56,7 @@ func TestInt32(t *testing.T) {
 	require.Equal(t, int32(40), atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
-	require.NotNil(t, err, "json.Unmarshal didn't error as expected.")
+	require.Error(t, err, "json.Unmarshal didn't error as expected.")
 	require.Equal(t, err.Error(), "json: cannot unmarshal string into Go value of type int32",
 		"json.Unmarshal didn't error with the expected error message.")
 }
@@ -88,7 +88,7 @@ func TestInt64(t *testing.T) {
 	require.Equal(t, int64(40), atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
-	require.NotNil(t, err, "json.Unmarshal didn't error as expected.")
+	require.Error(t, err, "json.Unmarshal didn't error as expected.")
 	require.Equal(t, err.Error(), "json: cannot unmarshal string into Go value of type int64",
 		"json.Unmarshal didn't error with the expected error message.")
 }
@@ -120,7 +120,7 @@ func TestUint32(t *testing.T) {
 	require.Equal(t, uint32(40), atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
-	require.NotNil(t, err, "json.Unmarshal didn't error as expected.")
+	require.Error(t, err, "json.Unmarshal didn't error as expected.")
 	require.Equal(t, err.Error(), "json: cannot unmarshal string into Go value of type uint32",
 		"json.Unmarshal didn't error with the expected error message.")
 }
@@ -152,7 +152,7 @@ func TestUint64(t *testing.T) {
 	require.Equal(t, uint64(40), atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
-	require.NotNil(t, err, "json.Unmarshal didn't error as expected.")
+	require.Error(t, err, "json.Unmarshal didn't error as expected.")
 	require.Equal(t, err.Error(), "json: cannot unmarshal string into Go value of type uint64",
 		"json.Unmarshal didn't error with the expected error message.")
 }
@@ -190,7 +190,7 @@ func TestBool(t *testing.T) {
 	require.False(t, atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("42"), &atom)
-	require.NotNil(t, err, "json.Unmarshal didn't error as expected.")
+	require.Error(t, err, "json.Unmarshal didn't error as expected.")
 	require.Equal(t, err.Error(), "json: cannot unmarshal number into Go value of type bool",
 		"json.Unmarshal didn't error with the expected error message.")
 }
@@ -219,7 +219,7 @@ func TestFloat64(t *testing.T) {
 	require.Equal(t, float64(40.5), atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("\"40.5\""), &atom)
-	require.NotNil(t, err, "json.Unmarshal didn't error as expected.")
+	require.Error(t, err, "json.Unmarshal didn't error as expected.")
 	require.Equal(t, err.Error(), "json: cannot unmarshal string into Go value of type float64", "json.Unmarshal didn't error with the expected error message.")
 }
 
