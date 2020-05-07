@@ -48,11 +48,11 @@ func TestInt32(t *testing.T) {
 	require.Equal(t, int32(42), atom.Load(), "Store didn't set the correct value.")
 
 	bytes, err := json.Marshal(atom)
-	require.Nil(t, err, "json.Marshal errored unexpectedly.")
+	require.NoError(t, err, "json.Marshal errored unexpectedly.")
 	require.Equal(t, []byte("42"), bytes, "json.Marshal encoded the wrong bytes.")
 
 	err = json.Unmarshal([]byte("40"), &atom)
-	require.Nil(t, err, "json.Unmarshal errored unexpectedly.")
+	require.NoError(t, err, "json.Unmarshal errored unexpectedly.")
 	require.Equal(t, int32(40), atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
@@ -80,11 +80,11 @@ func TestInt64(t *testing.T) {
 	require.Equal(t, int64(42), atom.Load(), "Store didn't set the correct value.")
 
 	bytes, err := json.Marshal(atom)
-	require.Nil(t, err, "json.Marshal errored unexpectedly.")
+	require.NoError(t, err, "json.Marshal errored unexpectedly.")
 	require.Equal(t, []byte("42"), bytes, "json.Marshal encoded the wrong bytes.")
 
 	err = json.Unmarshal([]byte("40"), &atom)
-	require.Nil(t, err, "json.Unmarshal errored unexpectedly.")
+	require.NoError(t, err, "json.Unmarshal errored unexpectedly.")
 	require.Equal(t, int64(40), atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
@@ -112,11 +112,11 @@ func TestUint32(t *testing.T) {
 	require.Equal(t, uint32(42), atom.Load(), "Store didn't set the correct value.")
 
 	bytes, err := json.Marshal(atom)
-	require.Nil(t, err, "json.Marshal errored unexpectedly.")
+	require.NoError(t, err, "json.Marshal errored unexpectedly.")
 	require.Equal(t, []byte("42"), bytes, "json.Marshal encoded the wrong bytes.")
 
 	err = json.Unmarshal([]byte("40"), &atom)
-	require.Nil(t, err, "json.Unmarshal errored unexpectedly.")
+	require.NoError(t, err, "json.Unmarshal errored unexpectedly.")
 	require.Equal(t, uint32(40), atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
@@ -144,11 +144,11 @@ func TestUint64(t *testing.T) {
 	require.Equal(t, uint64(42), atom.Load(), "Store didn't set the correct value.")
 
 	bytes, err := json.Marshal(atom)
-	require.Nil(t, err, "json.Marshal errored unexpectedly.")
+	require.NoError(t, err, "json.Marshal errored unexpectedly.")
 	require.Equal(t, []byte("42"), bytes, "json.Marshal encoded the wrong bytes.")
 
 	err = json.Unmarshal([]byte("40"), &atom)
-	require.Nil(t, err, "json.Unmarshal errored unexpectedly.")
+	require.NoError(t, err, "json.Unmarshal errored unexpectedly.")
 	require.Equal(t, uint64(40), atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
@@ -182,11 +182,11 @@ func TestBool(t *testing.T) {
 
 	atom.Store(true)
 	bytes, err := json.Marshal(atom)
-	require.Nil(t, err, "json.Marshal errored unexpectedly.")
+	require.NoError(t, err, "json.Marshal errored unexpectedly.")
 	require.Equal(t, []byte("true"), bytes, "json.Marshal encoded the wrong bytes.")
 
 	err = json.Unmarshal([]byte("false"), &atom)
-	require.Nil(t, err, "json.Unmarshal errored unexpectedly.")
+	require.NoError(t, err, "json.Unmarshal errored unexpectedly.")
 	require.False(t, atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("42"), &atom)
@@ -211,11 +211,11 @@ func TestFloat64(t *testing.T) {
 
 	atom.Store(42.5)
 	bytes, err := json.Marshal(atom)
-	require.Nil(t, err, "json.Marshal errored unexpectedly.")
+	require.NoError(t, err, "json.Marshal errored unexpectedly.")
 	require.Equal(t, []byte("42.5"), bytes, "json.Marshal encoded the wrong bytes.")
 
 	err = json.Unmarshal([]byte("40.5"), &atom)
-	require.Nil(t, err, "json.Unmarshal errored unexpectedly.")
+	require.NoError(t, err, "json.Unmarshal errored unexpectedly.")
 	require.Equal(t, float64(40.5), atom.Load(), "json.Unmarshal didn't set the correct value.")
 
 	err = json.Unmarshal([]byte("\"40.5\""), &atom)
