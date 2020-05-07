@@ -57,8 +57,8 @@ func TestInt32(t *testing.T) {
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.Equal(t, err.Error(), "json: cannot unmarshal string into Go value of type int32",
-		"json.Unmarshal didn't error with the expected error message.")
+	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
 func TestInt64(t *testing.T) {
@@ -89,8 +89,8 @@ func TestInt64(t *testing.T) {
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.Equal(t, err.Error(), "json: cannot unmarshal string into Go value of type int64",
-		"json.Unmarshal didn't error with the expected error message.")
+	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
 func TestUint32(t *testing.T) {
@@ -121,8 +121,8 @@ func TestUint32(t *testing.T) {
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.Equal(t, err.Error(), "json: cannot unmarshal string into Go value of type uint32",
-		"json.Unmarshal didn't error with the expected error message.")
+	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
 func TestUint64(t *testing.T) {
@@ -153,8 +153,8 @@ func TestUint64(t *testing.T) {
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.Equal(t, err.Error(), "json: cannot unmarshal string into Go value of type uint64",
-		"json.Unmarshal didn't error with the expected error message.")
+	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
 func TestBool(t *testing.T) {
@@ -191,8 +191,8 @@ func TestBool(t *testing.T) {
 
 	err = json.Unmarshal([]byte("42"), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.Equal(t, err.Error(), "json: cannot unmarshal number into Go value of type bool",
-		"json.Unmarshal didn't error with the expected error message.")
+	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
 func TestFloat64(t *testing.T) {
@@ -220,7 +220,8 @@ func TestFloat64(t *testing.T) {
 
 	err = json.Unmarshal([]byte("\"40.5\""), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.Equal(t, err.Error(), "json: cannot unmarshal string into Go value of type float64", "json.Unmarshal didn't error with the expected error message.")
+	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
 func TestDuration(t *testing.T) {
