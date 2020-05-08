@@ -21,7 +21,7 @@
 package atomic
 
 import (
-	"encoding/json
+	"encoding/json"
 	"errors"
 	"testing"
 	"time"
