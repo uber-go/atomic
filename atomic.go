@@ -24,7 +24,6 @@ package atomic
 
 import (
 	"encoding/json"
-	"errors"
 	"math"
 	"sync/atomic"
 	"time"
