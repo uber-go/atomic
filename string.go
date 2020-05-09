@@ -20,6 +20,10 @@
 
 package atomic
 
+import (
+	"encoding/json"
+)
+
 // String is an atomic type-safe wrapper around Value for strings.
 type String struct{ v Value }
 
@@ -39,6 +43,21 @@ func (s *String) Load() string {
 		return ""
 	}
 	return v.(string)
+}
+
+// MarshalJSON encodes the wrapped string into JSON.
+func (s *String) MarshalJSON() ([]byte, error) {
+	return json.Marshal(s.Load())
+}
+
+// UnmarshalJSON decodes JSON into the wrapped string.
+func (s *String) UnmarshalJSON(b []byte) error {
+	var v string
+	if err := json.Unmarshal(b, &v); err != nil {
+		return err
+	}
+	s.Store(v)
+	return nil
 }
 
 // Store atomically stores the passed string.

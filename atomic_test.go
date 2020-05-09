@@ -240,6 +240,20 @@ func TestDuration(t *testing.T) {
 
 	atom.Store(10 * time.Minute)
 	require.Equal(t, 10*time.Minute, atom.Load(), "Store didn't set the correct value.")
+
+	atom.Store(time.Second)
+    bytes, err := json.Marshal(atom)
+	require.NoError(t, err, "json.Marshal errored unexpectedly.")
+	require.Equal(t, []byte("1000000000"), bytes, "json.Marshal encoded the wrong bytes.")
+
+	err = json.Unmarshal([]byte("1000000000"), &atom)
+	require.NoError(t, err, "json.Unmarshal errored unexpectedly.")
+	require.Equal(t, time.Second, atom.Load(), "json.Unmarshal didn't set the correct value.")
+
+	err = json.Unmarshal([]byte("\"1000000000\""), &atom)
+	require.Error(t, err, "json.Unmarshal didn't error as expected.")
+	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
 func TestValue(t *testing.T) {

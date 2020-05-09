@@ -442,6 +442,21 @@ func (d *Duration) CAS(old, new time.Duration) bool {
 	return d.v.CAS(int64(old), int64(new))
 }
 
+// MarshalJSON encodes the wrapped time.Duration into JSON.
+func (d *Duration) MarshalJSON() ([]byte, error) {
+	return json.Marshal(d.Load())
+}
+
+// UnmarshalJSON decodes JSON into the wrapped time.Duration.
+func (d *Duration) UnmarshalJSON(b []byte) error {
+	var v time.Duration
+	if err := json.Unmarshal(b, &v); err != nil {
+		return err
+	}
+	d.Store(v)
+	return nil
+}
+
 // Value shadows the type of the same name from sync/atomic
 // https://godoc.org/sync/atomic#Value
 type Value struct{ atomic.Value }
