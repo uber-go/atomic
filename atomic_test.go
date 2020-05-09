@@ -242,7 +242,7 @@ func TestDuration(t *testing.T) {
 	require.Equal(t, 10*time.Minute, atom.Load(), "Store didn't set the correct value.")
 
 	atom.Store(time.Second)
-    bytes, err := json.Marshal(atom)
+	bytes, err := json.Marshal(atom)
 	require.NoError(t, err, "json.Marshal errored unexpectedly.")
 	require.Equal(t, []byte("1000000000"), bytes, "json.Marshal encoded the wrong bytes.")
 
