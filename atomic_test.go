@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Uber Technologies, Inc.
+// Copyright (c) 2016-2020 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,6 @@ package atomic
 
 import (
 	"encoding/json"
-	"errors"
 	"testing"
 	"time"
 
@@ -58,7 +57,7 @@ func TestInt32(t *testing.T) {
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+	assertErrorJSONUnmarshalType(t, err,
 		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
@@ -90,7 +89,7 @@ func TestInt64(t *testing.T) {
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+	assertErrorJSONUnmarshalType(t, err,
 		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
@@ -122,7 +121,7 @@ func TestUint32(t *testing.T) {
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+	assertErrorJSONUnmarshalType(t, err,
 		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
@@ -154,7 +153,7 @@ func TestUint64(t *testing.T) {
 
 	err = json.Unmarshal([]byte("\"40\""), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+	assertErrorJSONUnmarshalType(t, err,
 		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
@@ -192,7 +191,7 @@ func TestBool(t *testing.T) {
 
 	err = json.Unmarshal([]byte("42"), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+	assertErrorJSONUnmarshalType(t, err,
 		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
@@ -221,7 +220,7 @@ func TestFloat64(t *testing.T) {
 
 	err = json.Unmarshal([]byte("\"40.5\""), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+	assertErrorJSONUnmarshalType(t, err,
 		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
@@ -252,7 +251,7 @@ func TestDuration(t *testing.T) {
 
 	err = json.Unmarshal([]byte("\"1000000000\""), &atom)
 	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	require.True(t, errors.As(err, new(*json.UnmarshalTypeError)),
+	assertErrorJSONUnmarshalType(t, err,
 		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 }
 
