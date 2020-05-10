@@ -42,16 +42,22 @@ func TestString(t *testing.T) {
 	atom = NewString("bcd")
 	require.Equal(t, "bcd", atom.Load(), "Expected Load to return initialized value")
 
-	bytes, err := json.Marshal(atom)
-	require.NoError(t, err, "json.Marshal errored unexpectedly.")
-	require.Equal(t, []byte("\"bcd\""), bytes, "json.Marshal encoded the wrong bytes.")
+	t.Run("JSON/Marshal", func(t *testing.T) {
+		bytes, err := json.Marshal(atom)
+		require.NoError(t, err, "json.Marshal errored unexpectedly.")
+		require.Equal(t, []byte("\"bcd\""), bytes, "json.Marshal encoded the wrong bytes.")
+	})
 
-	err = json.Unmarshal([]byte("\"abc\""), &atom)
-	require.NoError(t, err, "json.Unmarshal errored unexpectedly.")
-	require.Equal(t, "abc", atom.Load(), "json.Unmarshal didn't set the correct value.")
+	t.Run("JSON/Unmarshal", func(t *testing.T) {
+		err := json.Unmarshal([]byte("\"abc\""), &atom)
+		require.NoError(t, err, "json.Unmarshal errored unexpectedly.")
+		require.Equal(t, "abc", atom.Load(), "json.Unmarshal didn't set the correct value.")
+	})
 
-	err = json.Unmarshal([]byte("42"), &atom)
-	require.Error(t, err, "json.Unmarshal didn't error as expected.")
-	assertErrorJSONUnmarshalType(t, err,
-		"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
+	t.Run("JSON/Unmarshal/Error", func(t *testing.T) {
+		err := json.Unmarshal([]byte("42"), &atom)
+		require.Error(t, err, "json.Unmarshal didn't error as expected.")
+		assertErrorJSONUnmarshalType(t, err,
+			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
+	})
 }
