@@ -22,6 +22,7 @@ package atomic
 
 import (
 	"encoding/json"
+	"encoding/xml"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -59,5 +60,19 @@ func TestString(t *testing.T) {
 		require.Error(t, err, "json.Unmarshal didn't error as expected.")
 		assertErrorJSONUnmarshalType(t, err,
 			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
+	})
+
+	atom = NewString("foo")
+
+	t.Run("XML/Marshal", func(t *testing.T) {
+		bytes, err := xml.Marshal(atom)
+		require.NoError(t, err, "xml.Marshal errored unexpectedly.")
+		require.Equal(t, []byte("<String>foo</String>"), bytes, "xml.Marshal encoded the wrong bytes.")
+	})
+
+	t.Run("XML/Unmarshal", func(t *testing.T) {
+		err := xml.Unmarshal([]byte("<String>bar</String>"), &atom)
+		require.NoError(t, err, "xml.Unmarshal errored unexpectedly.")
+		require.Equal(t, "bar", atom.Load(), "xml.Unmarshal didn't set the correct value.")
 	})
 }

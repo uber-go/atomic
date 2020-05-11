@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Uber Technologies, Inc.
+// Copyright (c) 2016-2020 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,10 +19,6 @@
 // THE SOFTWARE.
 
 package atomic
-
-import (
-	"encoding/json"
-)
 
 // String is an atomic type-safe wrapper around Value for strings.
 type String struct{ v Value }
@@ -45,18 +41,18 @@ func (s *String) Load() string {
 	return v.(string)
 }
 
-// MarshalJSON encodes the wrapped string into JSON.
-func (s *String) MarshalJSON() ([]byte, error) {
-	return json.Marshal(s.Load())
+// MarshalText encodes the wrapped string into a textual form.
+//
+// This makes it encodable as JSON, YAML, XML, and more.
+func (s *String) MarshalText() ([]byte, error) {
+	return []byte(s.Load()), nil
 }
 
-// UnmarshalJSON decodes JSON into the wrapped string.
-func (s *String) UnmarshalJSON(b []byte) error {
-	var v string
-	if err := json.Unmarshal(b, &v); err != nil {
-		return err
-	}
-	s.Store(v)
+// UnmarshalText decodes text and replaces the wrapped string with it.
+//
+// This makes it decodable from JSON, YAML, XML, and more.
+func (s *String) UnmarshalText(b []byte) error {
+	s.Store(string(b))
 	return nil
 }
 
