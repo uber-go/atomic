@@ -25,10 +25,10 @@ import (
 	"sync/atomic"
 )
 
-// Uint32 is an atomic wrapper around an uint32.
+// Uint32 is an atomic wrapper around uint32.
 type Uint32 struct{ v uint32 }
 
-// NewUint32 creates a Uint32.
+// NewUint32 creates a new Uint32.
 func NewUint32(i uint32) *Uint32 {
 	return &Uint32{i}
 }
@@ -53,7 +53,7 @@ func (i *Uint32) Inc() uint32 {
 	return i.Add(1)
 }
 
-// Dec atomically decrements the wrapped int32 and returns the new value.
+// Dec atomically decrements the wrapped uint32 and returns the new value.
 func (i *Uint32) Dec() uint32 {
 	return i.Sub(1)
 }

@@ -25,10 +25,10 @@ import (
 	"sync/atomic"
 )
 
-// Int64 is an atomic wrapper around an int64.
+// Int64 is an atomic wrapper around int64.
 type Int64 struct{ v int64 }
 
-// NewInt64 creates an Int64.
+// NewInt64 creates a new Int64.
 func NewInt64(i int64) *Int64 {
 	return &Int64{i}
 }
