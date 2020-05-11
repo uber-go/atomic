@@ -1,4 +1,4 @@
-// Copyright (c) 2016-2020 Uber Technologies, Inc.
+// Copyright (c) 2020 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,45 +20,30 @@
 
 package atomic
 
-// String is an atomic type-safe wrapper around Value for strings.
+// String is an atomic type-safe wrapper for string values.
 type String struct{ v Value }
 
-// NewString creates a String.
-func NewString(str string) *String {
-	s := &String{}
-	if str != "" {
-		s.Store(str)
+// NewString creates a new String.
+func NewString(v string) *String {
+	x := &String{}
+	if v != "" {
+		x.Store(v)
 	}
-	return s
+	return x
 }
 
 // Load atomically loads the wrapped string.
-func (s *String) Load() string {
-	v := s.v.Load()
+func (x *String) Load() string {
+	v := x.v.Load()
 	if v == nil {
 		return ""
 	}
-	return v.(string)
-}
-
-// MarshalText encodes the wrapped string into a textual form.
-//
-// This makes it encodable as JSON, YAML, XML, and more.
-func (s *String) MarshalText() ([]byte, error) {
-	return []byte(s.Load()), nil
-}
-
-// UnmarshalText decodes text and replaces the wrapped string with it.
-//
-// This makes it decodable from JSON, YAML, XML, and more.
-func (s *String) UnmarshalText(b []byte) error {
-	s.Store(string(b))
-	return nil
+	return string(v.(string))
 }
 
 // Store atomically stores the passed string.
-// Note: Converting the string to an interface{} to store in the Value
-// requires an allocation.
-func (s *String) Store(str string) {
-	s.v.Store(str)
+//
+// NOTE: This will cause an allocation.
+func (x *String) Store(v string) {
+	x.v.Store(string(v))
 }

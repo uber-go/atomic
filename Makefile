@@ -3,6 +3,7 @@ export GOBIN ?= $(shell pwd)/bin
 
 GOLINT = $(GOBIN)/golint
 GEN_ATOMICINT = $(GOBIN)/gen-atomicint
+GEN_VALUEWRAPPER = $(GOBIN)/gen-valuewrapper
 
 GO_FILES ?= $(shell find . '(' -path .git -o -path vendor ')' -prune -o -name '*.go' -print)
 
@@ -23,6 +24,9 @@ gofmt:
 $(GOLINT):
 	go install golang.org/x/lint/golint
 
+$(GEN_VALUEWRAPPER): $(wildcard ./internal/gen-valuewrapper/*)
+	go build -o $@ ./internal/gen-valuewrapper
+
 $(GEN_ATOMICINT): $(wildcard ./internal/gen-atomicint/*)
 	go build -o $@ ./internal/gen-atomicint
 
@@ -39,7 +43,7 @@ cover:
 	go tool cover -html=cover.out -o cover.html
 
 .PHONY: generate
-generate: $(GEN_ATOMICINT)
+generate: $(GEN_ATOMICINT) $(GEN_VALUEWRAPPER)
 	go generate ./...
 
 .PHONY: generatenodirty

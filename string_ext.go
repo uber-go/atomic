@@ -20,10 +20,17 @@
 
 package atomic
 
-//go:generate bin/gen-atomicint -name=Int32 -wrapped=int32 -file=int32.go
-//go:generate bin/gen-atomicint -name=Int64 -wrapped=int64 -file=int64.go
-//go:generate bin/gen-atomicint -name=Uint32 -wrapped=uint32 -unsigned -file=uint32.go
-//go:generate bin/gen-atomicint -name=Uint64 -wrapped=uint64 -unsigned -file=uint64.go
+// MarshalText encodes the wrapped string into a textual form.
+//
+// This makes it encodable as JSON, YAML, XML, and more.
+func (s *String) MarshalText() ([]byte, error) {
+	return []byte(s.Load()), nil
+}
 
-//go:generate bin/gen-valuewrapper -name=String -type=string -zero="" -file=string.go
-//go:generate bin/gen-valuewrapper -name=Error -type=error -zero=nil -file=error.go
+// UnmarshalText decodes text and replaces the wrapped string with it.
+//
+// This makes it decodable from JSON, YAML, XML, and more.
+func (s *String) UnmarshalText(b []byte) error {
+	s.Store(string(b))
+	return nil
+}
