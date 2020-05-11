@@ -45,11 +45,11 @@ func TestString(t *testing.T) {
 	t.Run("JSON/Marshal", func(t *testing.T) {
 		bytes, err := json.Marshal(atom)
 		require.NoError(t, err, "json.Marshal errored unexpectedly.")
-		require.Equal(t, []byte("\"bcd\""), bytes, "json.Marshal encoded the wrong bytes.")
+		require.Equal(t, []byte(`"bcd"`), bytes, "json.Marshal encoded the wrong bytes.")
 	})
 
 	t.Run("JSON/Unmarshal", func(t *testing.T) {
-		err := json.Unmarshal([]byte("\"abc\""), &atom)
+		err := json.Unmarshal([]byte(`"abc"`), &atom)
 		require.NoError(t, err, "json.Unmarshal errored unexpectedly.")
 		require.Equal(t, "abc", atom.Load(), "json.Unmarshal didn't set the correct value.")
 	})

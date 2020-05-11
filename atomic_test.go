@@ -60,7 +60,7 @@ func TestInt32(t *testing.T) {
 	})
 
 	t.Run("JSON/Unmarshal/Error", func(t *testing.T) {
-		err := json.Unmarshal([]byte("\"40\""), &atom)
+		err := json.Unmarshal([]byte(`"40"`), &atom)
 		require.Error(t, err, "json.Unmarshal didn't error as expected.")
 		assertErrorJSONUnmarshalType(t, err,
 			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
@@ -98,7 +98,7 @@ func TestInt64(t *testing.T) {
 	})
 
 	t.Run("JSON/Unmarshal/Error", func(t *testing.T) {
-		err := json.Unmarshal([]byte("\"40\""), &atom)
+		err := json.Unmarshal([]byte(`"40"`), &atom)
 		require.Error(t, err, "json.Unmarshal didn't error as expected.")
 		assertErrorJSONUnmarshalType(t, err,
 			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
@@ -136,7 +136,7 @@ func TestUint32(t *testing.T) {
 	})
 
 	t.Run("JSON/Unmarshal/Error", func(t *testing.T) {
-		err := json.Unmarshal([]byte("\"40\""), &atom)
+		err := json.Unmarshal([]byte(`"40"`), &atom)
 		require.Error(t, err, "json.Unmarshal didn't error as expected.")
 		assertErrorJSONUnmarshalType(t, err,
 			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
@@ -174,7 +174,7 @@ func TestUint64(t *testing.T) {
 	})
 
 	t.Run("JSON/Unmarshal/Error", func(t *testing.T) {
-		err := json.Unmarshal([]byte("\"40\""), &atom)
+		err := json.Unmarshal([]byte(`"40"`), &atom)
 		require.Error(t, err, "json.Unmarshal didn't error as expected.")
 		assertErrorJSONUnmarshalType(t, err,
 			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
@@ -253,7 +253,7 @@ func TestFloat64(t *testing.T) {
 	})
 
 	t.Run("JSON/Unmarshal/Error", func(t *testing.T) {
-		err := json.Unmarshal([]byte("\"40.5\""), &atom)
+		err := json.Unmarshal([]byte(`"40.5"`), &atom)
 		require.Error(t, err, "json.Unmarshal didn't error as expected.")
 		assertErrorJSONUnmarshalType(t, err,
 			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
@@ -290,7 +290,7 @@ func TestDuration(t *testing.T) {
 	})
 
 	t.Run("JSON/Unmarshal/Error", func(t *testing.T) {
-		err := json.Unmarshal([]byte("\"1000000000\""), &atom)
+		err := json.Unmarshal([]byte(`"1000000000"`), &atom)
 		require.Error(t, err, "json.Unmarshal didn't error as expected.")
 		assertErrorJSONUnmarshalType(t, err,
 			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
