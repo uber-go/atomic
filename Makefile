@@ -7,6 +7,11 @@ GEN_VALUEWRAPPER = $(GOBIN)/gen-valuewrapper
 
 GO_FILES ?= $(shell find . '(' -path .git -o -path vendor ')' -prune -o -name '*.go' -print)
 
+# Also update ignore section in .codecov.yml.
+COVER_IGNORE_PKGS = \
+	go.uber.org/atomic/internal/gen-atomicint \
+	go.uber.org/atomic/internal/gen-valuewrapper
+
 .PHONY: build
 build:
 	go build ./...
@@ -37,9 +42,15 @@ golint: $(GOLINT)
 .PHONY: lint
 lint: gofmt golint generatenodirty
 
+# comma separated list of packages to consider for code coverage.
+COVER_PKG = $(shell \
+	go list -find ./... | \
+	grep -v $(foreach pkg,$(COVER_IGNORE_PKGS),-e "^$(pkg)$$") | \
+	paste -sd, -)
+
 .PHONY: cover
 cover:
-	go test -coverprofile=cover.out -coverpkg ./... -v ./...
+	go test -coverprofile=cover.out -coverpkg  $(COVER_PKG) -v ./...
 	go tool cover -html=cover.out -o cover.html
 
 .PHONY: generate
