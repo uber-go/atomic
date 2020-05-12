@@ -20,30 +20,10 @@
 
 package atomic
 
-// String is an atomic type-safe wrapper for string values.
-type String struct{ v Value }
+//go:generate bin/gen-atomicint -name=Int32 -wrapped=int32 -file=int32.go
+//go:generate bin/gen-atomicint -name=Int64 -wrapped=int64 -file=int64.go
+//go:generate bin/gen-atomicint -name=Uint32 -wrapped=uint32 -unsigned -file=uint32.go
+//go:generate bin/gen-atomicint -name=Uint64 -wrapped=uint64 -unsigned -file=uint64.go
 
-// NewString creates a new String.
-func NewString(v string) *String {
-	x := &String{}
-	if v != "" {
-		x.Store(v)
-	}
-	return x
-}
-
-// Load atomically loads the wrapped string.
-func (x *String) Load() string {
-	v := x.v.Load()
-	if v == nil {
-		return ""
-	}
-	return string(v.(string))
-}
-
-// Store atomically stores the passed string.
-//
-// NOTE: This will cause an allocation.
-func (x *String) Store(v string) {
-	x.v.Store(string(v))
-}
+//go:generate bin/gen-valuewrapper -name=String -type=string -zero="" -file=string.go
+//go:generate bin/gen-valuewrapper -name=Error -type=error -zero=nil -file=error.go

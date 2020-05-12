@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Uber Technologies, Inc.
+// Copyright (c) 2020 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,36 +20,40 @@
 
 package atomic
 
-// Error is an atomic type-safe wrapper around Value for errors
+// Error is an atomic type-safe wrapper for error values.
 type Error struct{ v Value }
 
-// errorHolder is non-nil holder for error object.
-// atomic.Value panics on saving nil object, so err object needs to be
-// wrapped with valid object first.
-type errorHolder struct{ err error }
+type storedError struct{ Value error }
 
-// NewError creates new atomic error object
-func NewError(err error) *Error {
-	e := &Error{}
-	if err != nil {
-		e.Store(err)
-	}
-	return e
+func wrapError(v error) storedError {
+	return storedError{v}
 }
 
-// Load atomically loads the wrapped error
-func (e *Error) Load() error {
-	v := e.v.Load()
+func unwrapError(v storedError) error {
+	return v.Value
+}
+
+// NewError creates a new Error.
+func NewError(v error) *Error {
+	x := &Error{}
+	if v != nil {
+		x.Store(v)
+	}
+	return x
+}
+
+// Load atomically loads the wrapped error.
+func (x *Error) Load() error {
+	v := x.v.Load()
 	if v == nil {
 		return nil
 	}
-
-	eh := v.(errorHolder)
-	return eh.err
+	return unwrapError(v.(storedError))
 }
 
-// Store atomically stores error.
-// NOTE: a holder object is allocated on each Store call.
-func (e *Error) Store(err error) {
-	e.v.Store(errorHolder{err: err})
+// Store atomically stores the passed error.
+//
+// NOTE: This will cause an allocation.
+func (x *Error) Store(v error) {
+	x.v.Store(wrapError(v))
 }

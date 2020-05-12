@@ -2,8 +2,15 @@
 export GOBIN ?= $(shell pwd)/bin
 
 GOLINT = $(GOBIN)/golint
+GEN_ATOMICINT = $(GOBIN)/gen-atomicint
+GEN_VALUEWRAPPER = $(GOBIN)/gen-valuewrapper
 
-GO_FILES ?= *.go
+GO_FILES ?= $(shell find . '(' -path .git -o -path vendor ')' -prune -o -name '*.go' -print)
+
+# Also update ignore section in .codecov.yml.
+COVER_IGNORE_PKGS = \
+	go.uber.org/atomic/internal/gen-atomicint \
+	go.uber.org/atomic/internal/gen-valuewrapper
 
 .PHONY: build
 build:
@@ -22,14 +29,42 @@ gofmt:
 $(GOLINT):
 	go install golang.org/x/lint/golint
 
+$(GEN_VALUEWRAPPER): $(wildcard ./internal/gen-valuewrapper/*)
+	go build -o $@ ./internal/gen-valuewrapper
+
+$(GEN_ATOMICINT): $(wildcard ./internal/gen-atomicint/*)
+	go build -o $@ ./internal/gen-atomicint
+
 .PHONY: golint
 golint: $(GOLINT)
 	$(GOLINT) ./...
 
 .PHONY: lint
-lint: gofmt golint
+lint: gofmt golint generatenodirty
+
+# comma separated list of packages to consider for code coverage.
+COVER_PKG = $(shell \
+	go list -find ./... | \
+	grep -v $(foreach pkg,$(COVER_IGNORE_PKGS),-e "^$(pkg)$$") | \
+	paste -sd, -)
 
 .PHONY: cover
 cover:
-	go test -coverprofile=cover.out -coverpkg ./... -v ./...
+	go test -coverprofile=cover.out -coverpkg  $(COVER_PKG) -v ./...
 	go tool cover -html=cover.out -o cover.html
+
+.PHONY: generate
+generate: $(GEN_ATOMICINT) $(GEN_VALUEWRAPPER)
+	go generate ./...
+
+.PHONY: generatenodirty
+generatenodirty:
+	@[ -z "$$(git status --porcelain)" ] || ( \
+		echo "Working tree is dirty. Commit your changes first."; \
+		exit 1 )
+	@make generate
+	@status=$$(git status --porcelain); \
+		[ -z "$$status" ] || ( \
+		echo "Working tree is dirty after `make generate`:"; \
+		echo "$$status"; \
+		echo "Please ensure that the generated code is up-to-date." )

@@ -20,30 +20,17 @@
 
 package atomic
 
-// String is an atomic type-safe wrapper for string values.
-type String struct{ v Value }
-
-// NewString creates a new String.
-func NewString(v string) *String {
-	x := &String{}
-	if v != "" {
-		x.Store(v)
-	}
-	return x
-}
-
-// Load atomically loads the wrapped string.
-func (x *String) Load() string {
-	v := x.v.Load()
-	if v == nil {
-		return ""
-	}
-	return string(v.(string))
-}
-
-// Store atomically stores the passed string.
+// MarshalText encodes the wrapped string into a textual form.
 //
-// NOTE: This will cause an allocation.
-func (x *String) Store(v string) {
-	x.v.Store(string(v))
+// This makes it encodable as JSON, YAML, XML, and more.
+func (s *String) MarshalText() ([]byte, error) {
+	return []byte(s.Load()), nil
+}
+
+// UnmarshalText decodes text and replaces the wrapped string with it.
+//
+// This makes it decodable from JSON, YAML, XML, and more.
+func (s *String) UnmarshalText(b []byte) error {
+	s.Store(string(b))
+	return nil
 }
