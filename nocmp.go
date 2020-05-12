@@ -32,6 +32,4 @@ package atomic
 //
 //  - Disallow shallow copies of structs
 //  - Disallow comparison of pointers to uncomparable structs
-type nocmp struct {
-	_ [0]func()
-}
+type nocmp [0]func()
