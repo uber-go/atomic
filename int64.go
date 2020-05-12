@@ -28,11 +28,15 @@ import (
 )
 
 // Int64 is an atomic wrapper around int64.
-type Int64 struct{ v int64 }
+type Int64 struct {
+	nocmp // disallow non-atomic comparison
+
+	v int64
+}
 
 // NewInt64 creates a new Int64.
 func NewInt64(i int64) *Int64 {
-	return &Int64{i}
+	return &Int64{v: i}
 }
 
 // Load atomically loads the wrapped value.

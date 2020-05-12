@@ -1,4 +1,4 @@
-// Copyright (c) 2016 Uber Technologies, Inc.
+// Copyright (c) 2016-2020 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,11 +30,15 @@ import (
 )
 
 // Bool is an atomic Boolean.
-type Bool struct{ v uint32 }
+type Bool struct {
+	nocmp // disallow non-atomic comparison
+
+	v uint32
+}
 
 // NewBool creates a Bool.
 func NewBool(initial bool) *Bool {
-	return &Bool{boolToInt(initial)}
+	return &Bool{v: boolToInt(initial)}
 }
 
 // Load atomically loads the Boolean.
@@ -95,12 +99,14 @@ func (b *Bool) UnmarshalJSON(t []byte) error {
 
 // Float64 is an atomic wrapper around float64.
 type Float64 struct {
+	nocmp // disallow non-atomic comparison
+
 	v uint64
 }
 
 // NewFloat64 creates a Float64.
 func NewFloat64(f float64) *Float64 {
-	return &Float64{math.Float64bits(f)}
+	return &Float64{v: math.Float64bits(f)}
 }
 
 // Load atomically loads the wrapped value.
@@ -152,6 +158,8 @@ func (f *Float64) UnmarshalJSON(b []byte) error {
 // Duration is an atomic wrapper around time.Duration
 // https://godoc.org/time#Duration
 type Duration struct {
+	nocmp // disallow non-atomic comparison
+
 	v Int64
 }
 
@@ -207,4 +215,7 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 
 // Value shadows the type of the same name from sync/atomic
 // https://godoc.org/sync/atomic#Value
-type Value struct{ atomic.Value }
+type Value struct {
+	nocmp // disallow non-atomic comparison
+	atomic.Value
+}

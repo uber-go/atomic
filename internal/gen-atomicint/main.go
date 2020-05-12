@@ -133,11 +133,15 @@ import (
 )
 
 // {{ .Name }} is an atomic wrapper around {{ .Wrapped }}.
-type {{ .Name }} struct{ v {{ .Wrapped }} }
+type {{ .Name }} struct {
+	nocmp // disallow non-atomic comparison
+
+	v {{ .Wrapped }}
+}
 
 // New{{ .Name }} creates a new {{ .Name }}.
 func New{{ .Name }}(i {{ .Wrapped }}) *{{ .Name }} {
-	return &{{ .Name }}{i}
+	return &{{ .Name }}{v: i}
 }
 
 // Load atomically loads the wrapped value.

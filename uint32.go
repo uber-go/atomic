@@ -28,11 +28,15 @@ import (
 )
 
 // Uint32 is an atomic wrapper around uint32.
-type Uint32 struct{ v uint32 }
+type Uint32 struct {
+	nocmp // disallow non-atomic comparison
+
+	v uint32
+}
 
 // NewUint32 creates a new Uint32.
 func NewUint32(i uint32) *Uint32 {
-	return &Uint32{i}
+	return &Uint32{v: i}
 }
 
 // Load atomically loads the wrapped value.

@@ -28,11 +28,15 @@ import (
 )
 
 // Uint64 is an atomic wrapper around uint64.
-type Uint64 struct{ v uint64 }
+type Uint64 struct {
+	nocmp // disallow non-atomic comparison
+
+	v uint64
+}
 
 // NewUint64 creates a new Uint64.
 func NewUint64(i uint64) *Uint64 {
-	return &Uint64{i}
+	return &Uint64{v: i}
 }
 
 // Load atomically loads the wrapped value.

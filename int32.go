@@ -28,11 +28,15 @@ import (
 )
 
 // Int32 is an atomic wrapper around int32.
-type Int32 struct{ v int32 }
+type Int32 struct {
+	nocmp // disallow non-atomic comparison
+
+	v int32
+}
 
 // NewInt32 creates a new Int32.
 func NewInt32(i int32) *Int32 {
-	return &Int32{i}
+	return &Int32{v: i}
 }
 
 // Load atomically loads the wrapped value.
