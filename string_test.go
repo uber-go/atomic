@@ -25,6 +25,7 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -74,5 +75,11 @@ func TestString(t *testing.T) {
 		err := xml.Unmarshal([]byte("<String>bar</String>"), &atom)
 		require.NoError(t, err, "xml.Unmarshal errored unexpectedly.")
 		require.Equal(t, "bar", atom.Load(), "xml.Unmarshal didn't set the correct value.")
+	})
+
+	t.Run("String", func(t *testing.T) {
+		atom := NewString("foo")
+		assert.Equal(t, "foo", atom.String(),
+			"String() returned an unexpected value.")
 	})
 }

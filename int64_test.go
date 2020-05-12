@@ -22,8 +22,10 @@ package atomic
 
 import (
 	"encoding/json"
+	"math"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -62,5 +64,19 @@ func TestInt64(t *testing.T) {
 		require.Error(t, err, "json.Unmarshal didn't error as expected.")
 		assertErrorJSONUnmarshalType(t, err,
 			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
+	})
+
+	t.Run("String", func(t *testing.T) {
+		t.Run("positive", func(t *testing.T) {
+			atom := NewInt64(math.MaxInt64)
+			assert.Equal(t, "9223372036854775807", atom.String(),
+				"String() returned an unexpected value.")
+		})
+
+		t.Run("negative", func(t *testing.T) {
+			atom := NewInt64(math.MinInt64)
+			assert.Equal(t, "-9223372036854775808", atom.String(),
+				"String() returned an unexpected value.")
+		})
 	})
 }

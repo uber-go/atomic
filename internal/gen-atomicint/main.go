@@ -129,6 +129,7 @@ package atomic
 
 import (
 	"encoding/json"
+	"strconv"
 	"sync/atomic"
 )
 
@@ -203,5 +204,15 @@ func (i *{{ .Name }}) UnmarshalJSON(b []byte) error {
 	}
 	i.Store(v)
 	return nil
+}
+
+// String encodes the wrapped value as a string.
+func (i *{{ .Name }}) String() string {
+	v := i.Load()
+	{{ if .Unsigned -}}
+		return strconv.FormatUint(uint64(v), 10)
+	{{- else -}}
+		return strconv.FormatInt(int64(v), 10)
+	{{- end }}
 }
 `))

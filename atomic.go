@@ -25,6 +25,7 @@ package atomic
 import (
 	"encoding/json"
 	"math"
+	"strconv"
 	"sync/atomic"
 	"time"
 )
@@ -97,6 +98,11 @@ func (b *Bool) UnmarshalJSON(t []byte) error {
 	return nil
 }
 
+// String encodes the wrapped value as a string.
+func (b *Bool) String() string {
+	return strconv.FormatBool(b.Load())
+}
+
 // Float64 is an atomic wrapper around float64.
 type Float64 struct {
 	nocmp // disallow non-atomic comparison
@@ -155,6 +161,12 @@ func (f *Float64) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// String encodes the wrapped value as a string.
+func (f *Float64) String() string {
+	// 'g' is the behavior for floats with %v.
+	return strconv.FormatFloat(f.Load(), 'g', -1, 64)
+}
+
 // Duration is an atomic wrapper around time.Duration
 // https://godoc.org/time#Duration
 type Duration struct {
@@ -211,6 +223,11 @@ func (d *Duration) UnmarshalJSON(b []byte) error {
 	}
 	d.Store(v)
 	return nil
+}
+
+// String encodes the wrapped value as a string.
+func (d *Duration) String() string {
+	return d.Load().String()
 }
 
 // Value shadows the type of the same name from sync/atomic
