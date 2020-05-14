@@ -71,6 +71,19 @@ func TestBool(t *testing.T) {
 		assertErrorJSONUnmarshalType(t, err,
 			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
 	})
+
+	t.Run("String", func(t *testing.T) {
+		t.Run("true", func(t *testing.T) {
+			assert.Equal(t, "true", NewBool(true).String(),
+				"String() returned an unexpected value.")
+		})
+
+		t.Run("false", func(t *testing.T) {
+			var b Bool
+			assert.Equal(t, "false", b.String(),
+				"String() returned an unexpected value.")
+		})
+	})
 }
 
 func TestFloat64(t *testing.T) {
@@ -105,6 +118,11 @@ func TestFloat64(t *testing.T) {
 		require.Error(t, err, "json.Unmarshal didn't error as expected.")
 		assertErrorJSONUnmarshalType(t, err,
 			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
+	})
+
+	t.Run("String", func(t *testing.T) {
+		assert.Equal(t, "42.5", NewFloat64(42.5).String(),
+			"String() returned an unexpected value.")
 	})
 }
 
@@ -142,6 +160,11 @@ func TestDuration(t *testing.T) {
 		require.Error(t, err, "json.Unmarshal didn't error as expected.")
 		assertErrorJSONUnmarshalType(t, err,
 			"json.Unmarshal failed with unexpected error %v, want UnmarshalTypeError.", err)
+	})
+
+	t.Run("String", func(t *testing.T) {
+		assert.Equal(t, "42s", NewDuration(42*time.Second).String(),
+			"String() returned an unexpected value.")
 	})
 }
 

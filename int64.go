@@ -24,6 +24,7 @@ package atomic
 
 import (
 	"encoding/json"
+	"strconv"
 	"sync/atomic"
 )
 
@@ -92,4 +93,10 @@ func (i *Int64) UnmarshalJSON(b []byte) error {
 	}
 	i.Store(v)
 	return nil
+}
+
+// String encodes the wrapped value as a string.
+func (i *Int64) String() string {
+	v := i.Load()
+	return strconv.FormatInt(int64(v), 10)
 }

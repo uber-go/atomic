@@ -20,6 +20,11 @@
 
 package atomic
 
+// String returns the wrapped value.
+func (s *String) String() string {
+	return s.Load()
+}
+
 // MarshalText encodes the wrapped string into a textual form.
 //
 // This makes it encodable as JSON, YAML, XML, and more.
