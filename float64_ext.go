@@ -20,24 +20,28 @@
 
 package atomic
 
-//go:generate bin/gen-atomicwrapper -name=String -type=string -wrapped=Value -file=string.go
+import "strconv"
 
-// String returns the wrapped value.
-func (s *String) String() string {
-	return s.Load()
+//go:generate bin/gen-atomicwrapper -name=Float64 -type=float64 -wrapped=Uint64 -pack=math.Float64bits -unpack=math.Float64frombits -cas -json -imports math -file=float64.go
+
+// Add atomically adds to the wrapped float64 and returns the new value.
+func (f *Float64) Add(s float64) float64 {
+	for {
+		old := f.Load()
+		new := old + s
+		if f.CAS(old, new) {
+			return new
+		}
+	}
 }
 
-// MarshalText encodes the wrapped string into a textual form.
-//
-// This makes it encodable as JSON, YAML, XML, and more.
-func (s *String) MarshalText() ([]byte, error) {
-	return []byte(s.Load()), nil
+// Sub atomically subtracts from the wrapped float64 and returns the new value.
+func (f *Float64) Sub(s float64) float64 {
+	return f.Add(-s)
 }
 
-// UnmarshalText decodes text and replaces the wrapped string with it.
-//
-// This makes it decodable from JSON, YAML, XML, and more.
-func (s *String) UnmarshalText(b []byte) error {
-	s.Store(string(b))
-	return nil
+// String encodes the wrapped value as a string.
+func (f *Float64) String() string {
+	// 'g' is the behavior for floats with %v.
+	return strconv.FormatFloat(f.Load(), 'g', -1, 64)
 }

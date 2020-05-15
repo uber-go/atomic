@@ -20,24 +20,21 @@
 
 package atomic
 
-//go:generate bin/gen-atomicwrapper -name=String -type=string -wrapped=Value -file=string.go
+import "time"
 
-// String returns the wrapped value.
-func (s *String) String() string {
-	return s.Load()
+//go:generate bin/gen-atomicwrapper -name=Duration -type=time.Duration -wrapped=Int64 -pack=int64 -unpack=time.Duration -cas -swap -json -imports time -file=duration.go
+
+// Add atomically adds to the wrapped time.Duration and returns the new value.
+func (d *Duration) Add(n time.Duration) time.Duration {
+	return time.Duration(d.v.Add(int64(n)))
 }
 
-// MarshalText encodes the wrapped string into a textual form.
-//
-// This makes it encodable as JSON, YAML, XML, and more.
-func (s *String) MarshalText() ([]byte, error) {
-	return []byte(s.Load()), nil
+// Sub atomically subtracts from the wrapped time.Duration and returns the new value.
+func (d *Duration) Sub(n time.Duration) time.Duration {
+	return time.Duration(d.v.Sub(int64(n)))
 }
 
-// UnmarshalText decodes text and replaces the wrapped string with it.
-//
-// This makes it decodable from JSON, YAML, XML, and more.
-func (s *String) UnmarshalText(b []byte) error {
-	s.Store(string(b))
-	return nil
+// String encodes the wrapped value as a string.
+func (d *Duration) String() string {
+	return d.Load().String()
 }

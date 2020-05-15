@@ -20,24 +20,34 @@
 
 package atomic
 
-//go:generate bin/gen-atomicwrapper -name=String -type=string -wrapped=Value -file=string.go
+import (
+	"strconv"
+)
 
-// String returns the wrapped value.
-func (s *String) String() string {
-	return s.Load()
+//go:generate bin/gen-atomicwrapper -name=Bool -type=bool -wrapped=Uint32 -pack=boolToInt -unpack=truthy -cas -swap -json -file=bool.go
+
+func truthy(n uint32) bool {
+	return n == 1
 }
 
-// MarshalText encodes the wrapped string into a textual form.
-//
-// This makes it encodable as JSON, YAML, XML, and more.
-func (s *String) MarshalText() ([]byte, error) {
-	return []byte(s.Load()), nil
+func boolToInt(b bool) uint32 {
+	if b {
+		return 1
+	}
+	return 0
 }
 
-// UnmarshalText decodes text and replaces the wrapped string with it.
-//
-// This makes it decodable from JSON, YAML, XML, and more.
-func (s *String) UnmarshalText(b []byte) error {
-	s.Store(string(b))
-	return nil
+// Toggle atomically negates the Boolean and returns the previous value.
+func (b *Bool) Toggle() bool {
+	for {
+		old := b.Load()
+		if b.CAS(old, !old) {
+			return old
+		}
+	}
+}
+
+// String encodes the wrapped value as a string.
+func (b *Bool) String() string {
+	return strconv.FormatBool(b.Load())
 }

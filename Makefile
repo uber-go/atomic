@@ -3,14 +3,14 @@ export GOBIN ?= $(shell pwd)/bin
 
 GOLINT = $(GOBIN)/golint
 GEN_ATOMICINT = $(GOBIN)/gen-atomicint
-GEN_VALUEWRAPPER = $(GOBIN)/gen-valuewrapper
+GEN_ATOMICWRAPPER = $(GOBIN)/gen-atomicwrapper
 
 GO_FILES ?= $(shell find . '(' -path .git -o -path vendor ')' -prune -o -name '*.go' -print)
 
 # Also update ignore section in .codecov.yml.
 COVER_IGNORE_PKGS = \
 	go.uber.org/atomic/internal/gen-atomicint \
-	go.uber.org/atomic/internal/gen-valuewrapper
+	go.uber.org/atomic/internal/gen-atomicwrapper
 
 .PHONY: build
 build:
@@ -29,8 +29,8 @@ gofmt:
 $(GOLINT):
 	go install golang.org/x/lint/golint
 
-$(GEN_VALUEWRAPPER): $(wildcard ./internal/gen-valuewrapper/*)
-	go build -o $@ ./internal/gen-valuewrapper
+$(GEN_ATOMICWRAPPER): $(wildcard ./internal/gen-atomicwrapper/*)
+	go build -o $@ ./internal/gen-atomicwrapper
 
 $(GEN_ATOMICINT): $(wildcard ./internal/gen-atomicint/*)
 	go build -o $@ ./internal/gen-atomicint
@@ -54,7 +54,7 @@ cover:
 	go tool cover -html=cover.out -o cover.html
 
 .PHONY: generate
-generate: $(GEN_ATOMICINT) $(GEN_VALUEWRAPPER)
+generate: $(GEN_ATOMICINT) $(GEN_ATOMICWRAPPER)
 	go generate ./...
 
 .PHONY: generatenodirty
