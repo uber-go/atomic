@@ -20,7 +20,7 @@
 
 // +build tools
 
-package atomic
+package tools
 
 import (
 	// Tools used during development.

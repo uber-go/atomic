@@ -27,7 +27,7 @@ gofmt:
 	@[ ! -s "$(FMT_LOG)" ] || (echo "gofmt failed:" && cat $(FMT_LOG) && false)
 
 $(GOLINT):
-	go install golang.org/x/lint/golint
+	cd tools && go install golang.org/x/lint/golint
 
 $(GEN_ATOMICWRAPPER): $(wildcard ./internal/gen-atomicwrapper/*)
 	go build -o $@ ./internal/gen-atomicwrapper
