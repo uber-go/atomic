@@ -30,7 +30,7 @@ import (
 
 // Int32 is an atomic wrapper around int32.
 type Int32 struct {
-	nocmp // disallow non-atomic comparison
+	_ nocmp // disallow non-atomic comparison
 
 	v int32
 }

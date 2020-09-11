@@ -135,7 +135,7 @@ import (
 
 // {{ .Name }} is an atomic wrapper around {{ .Wrapped }}.
 type {{ .Name }} struct {
-	nocmp // disallow non-atomic comparison
+	_ nocmp // disallow non-atomic comparison
 
 	v {{ .Wrapped }}
 }

@@ -77,17 +77,16 @@ func TestNocmpComparability(t *testing.T) {
 
 // nocmp must not add to the size of a struct in-memory.
 func TestNocmpSize(t *testing.T) {
-	type x struct{ i int }
+	type x struct{ _ int }
 
 	before := reflect.TypeOf(x{}).Size()
 
 	type y struct {
-		nocmp
-
-		x x
+		_ nocmp
+		_ x
 	}
 
-	after := reflect.TypeOf(x{}).Size()
+	after := reflect.TypeOf(y{}).Size()
 
 	assert.Equal(t, before, after,
 		"expected nocmp to have no effect on struct size")
@@ -100,7 +99,7 @@ func TestNocmpSize(t *testing.T) {
 //   var x atomic.Int32
 //   x = atomic.NewInt32(1)
 func TestNocmpCopy(t *testing.T) {
-	type foo struct{ nocmp }
+	type foo struct{ _ nocmp }
 
 	t.Run("struct copy", func(t *testing.T) {
 		a := foo{}

@@ -227,7 +227,7 @@ import (
 
 // {{ .Name }} is an atomic type-safe wrapper for {{ .Type }} values.
 type {{ .Name }} struct{
-	nocmp // disallow non-atomic comparison
+	_ nocmp // disallow non-atomic comparison
 
 	v {{ .Wrapped }}
 }

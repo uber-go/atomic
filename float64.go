@@ -29,7 +29,7 @@ import (
 
 // Float64 is an atomic type-safe wrapper for float64 values.
 type Float64 struct {
-	nocmp // disallow non-atomic comparison
+	_ nocmp // disallow non-atomic comparison
 
 	v Uint64
 }

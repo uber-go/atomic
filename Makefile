@@ -4,6 +4,7 @@ export GOBIN ?= $(shell pwd)/bin
 GOLINT = $(GOBIN)/golint
 GEN_ATOMICINT = $(GOBIN)/gen-atomicint
 GEN_ATOMICWRAPPER = $(GOBIN)/gen-atomicwrapper
+STATICCHECK = $(GOBIN)/staticcheck
 
 GO_FILES ?= $(shell find . '(' -path .git -o -path vendor ')' -prune -o -name '*.go' -print)
 
@@ -29,6 +30,9 @@ gofmt:
 $(GOLINT):
 	cd tools && go install golang.org/x/lint/golint
 
+$(STATICCHECK):
+	cd tools && go install honnef.co/go/tools/cmd/staticcheck
+
 $(GEN_ATOMICWRAPPER): $(wildcard ./internal/gen-atomicwrapper/*)
 	go build -o $@ ./internal/gen-atomicwrapper
 
@@ -39,8 +43,12 @@ $(GEN_ATOMICINT): $(wildcard ./internal/gen-atomicint/*)
 golint: $(GOLINT)
 	$(GOLINT) ./...
 
+.PHONY: staticcheck
+staticcheck: $(STATICCHECK)
+	$(STATICCHECK) ./...
+
 .PHONY: lint
-lint: gofmt golint generatenodirty
+lint: gofmt golint staticcheck generatenodirty
 
 # comma separated list of packages to consider for code coverage.
 COVER_PKG = $(shell \

@@ -24,7 +24,7 @@ package atomic
 
 // String is an atomic type-safe wrapper for string values.
 type String struct {
-	nocmp // disallow non-atomic comparison
+	_ nocmp // disallow non-atomic comparison
 
 	v Value
 }
