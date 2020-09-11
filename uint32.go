@@ -30,7 +30,7 @@ import (
 
 // Uint32 is an atomic wrapper around uint32.
 type Uint32 struct {
-	nocmp // disallow non-atomic comparison
+	_ nocmp // disallow non-atomic comparison
 
 	v uint32
 }

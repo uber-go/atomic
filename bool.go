@@ -28,7 +28,7 @@ import (
 
 // Bool is an atomic type-safe wrapper for bool values.
 type Bool struct {
-	nocmp // disallow non-atomic comparison
+	_ nocmp // disallow non-atomic comparison
 
 	v Uint32
 }

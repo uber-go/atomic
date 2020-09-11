@@ -30,7 +30,7 @@ import (
 
 // Int64 is an atomic wrapper around int64.
 type Int64 struct {
-	nocmp // disallow non-atomic comparison
+	_ nocmp // disallow non-atomic comparison
 
 	v int64
 }

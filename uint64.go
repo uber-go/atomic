@@ -30,7 +30,7 @@ import (
 
 // Uint64 is an atomic wrapper around uint64.
 type Uint64 struct {
-	nocmp // disallow non-atomic comparison
+	_ nocmp // disallow non-atomic comparison
 
 	v uint64
 }

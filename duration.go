@@ -29,7 +29,7 @@ import (
 
 // Duration is an atomic type-safe wrapper for time.Duration values.
 type Duration struct {
-	nocmp // disallow non-atomic comparison
+	_ nocmp // disallow non-atomic comparison
 
 	v Int64
 }
