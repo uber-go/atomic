@@ -87,7 +87,7 @@ func TestNocmpSize(t *testing.T) {
 		x x
 	}
 
-	after := reflect.TypeOf(x{}).Size()
+	after := reflect.TypeOf(y{}).Size()
 
 	assert.Equal(t, before, after,
 		"expected nocmp to have no effect on struct size")
