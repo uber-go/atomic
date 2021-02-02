@@ -114,6 +114,9 @@ func TestNocmpCopy(t *testing.T) {
 	})
 }
 
+// Fake go.mod with no dependencies.
+const _exampleGoMod = `module example.com/nocmp`
+
 const _badFile = `package atomic
 
 import "fmt"
@@ -135,26 +138,29 @@ func TestNocmpIntegration(t *testing.T) {
 	require.NoError(t, err, "unable to set up temporary directory")
 	defer os.RemoveAll(tempdir)
 
-	src := filepath.Join(tempdir, "src")
-	require.NoError(t, os.Mkdir(src, 0755), "unable to make source directory")
-
 	nocmp, err := ioutil.ReadFile("nocmp.go")
 	require.NoError(t, err, "unable to read nocmp.go")
 
 	require.NoError(t,
-		ioutil.WriteFile(filepath.Join(src, "nocmp.go"), nocmp, 0644),
+		ioutil.WriteFile(filepath.Join(tempdir, "go.mod"), []byte(_exampleGoMod), 0644),
+		"unable to write go.mod")
+
+	require.NoError(t,
+		ioutil.WriteFile(filepath.Join(tempdir, "nocmp.go"), nocmp, 0644),
 		"unable to write nocmp.go")
 
 	require.NoError(t,
-		ioutil.WriteFile(filepath.Join(src, "bad.go"), []byte(_badFile), 0644),
+		ioutil.WriteFile(filepath.Join(tempdir, "bad.go"), []byte(_badFile), 0644),
 		"unable to write bad.go")
 
 	var stderr bytes.Buffer
 	cmd := exec.Command("go", "build")
-	cmd.Dir = src
+	cmd.Dir = tempdir
 	// Forget OS build enviroment and set up a minimal one for "go build"
-	// to run.
+	// to run. We need GOPATH and GOCACHE set for the compiler to run but
+	// we don't do anything with them.
 	cmd.Env = []string{
+		"GOPATH=" + filepath.Join(tempdir, "gopath"),
 		"GOCACHE=" + filepath.Join(tempdir, "gocache"),
 	}
 	cmd.Stderr = &stderr
