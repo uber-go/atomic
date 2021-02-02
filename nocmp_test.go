@@ -156,13 +156,9 @@ func TestNocmpIntegration(t *testing.T) {
 	var stderr bytes.Buffer
 	cmd := exec.Command("go", "build")
 	cmd.Dir = tempdir
-	// Forget OS build enviroment and set up a minimal one for "go build"
-	// to run. We need GOPATH and GOCACHE set for the compiler to run but
-	// we don't do anything with them.
-	cmd.Env = []string{
-		"GOPATH=" + filepath.Join(tempdir, "gopath"),
-		"GOCACHE=" + filepath.Join(tempdir, "gocache"),
-	}
+	// Create a minimal build enviroment with only HOME set so that "go
+	// build" has somewhere to put the cache and other Go files in.
+	cmd.Env = []string{"HOME=" + filepath.Join(tempdir, "home")}
 	cmd.Stderr = &stderr
 	require.Error(t, cmd.Run(), "bad.go must not compile")
 
