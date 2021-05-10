@@ -35,9 +35,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
-    - name: Download Dependencies
-      run: go mod download
-
     - name: Lint
       if: matrix.latest
       run: make lint
