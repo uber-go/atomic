@@ -25,7 +25,7 @@ import (
 	"strconv"
 )
 
-//go:generate bin/gen-atomicwrapper -name=Float64 -type=float64 -wrapped=Uint64 -pack=math.Float64bits -unpack=math.Float64frombits -json -imports math -file=float64.go
+//go:generate bin/gen-atomicwrapper -name=Float64 -type=float64 -wrapped=Uint64 -pack=math.Float64bits -unpack=math.Float64frombits -swap -json -imports math -file=float64.go
 
 // Add atomically adds to the wrapped float64 and returns the new value.
 func (f *Float64) Add(s float64) float64 {

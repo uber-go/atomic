@@ -42,6 +42,9 @@ func TestFloat64(t *testing.T) {
 	require.Equal(t, float64(42.5), atom.Add(0.5), "Add didn't work.")
 	require.Equal(t, float64(42.0), atom.Sub(0.5), "Sub didn't work.")
 
+	require.Equal(t, float64(42.0), atom.Swap(45.0), "Swap didn't return the old value.")
+	require.Equal(t, float64(45.0), atom.Load(), "Swap didn't set the correct value.")
+
 	t.Run("JSON/Marshal", func(t *testing.T) {
 		atom.Store(42.5)
 		bytes, err := json.Marshal(atom)
