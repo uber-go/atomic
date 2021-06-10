@@ -55,11 +55,6 @@ func (x *Float64) Store(v float64) {
 	x.v.Store(math.Float64bits(v))
 }
 
-// CAS is an atomic compare-and-swap for float64 values.
-func (x *Float64) CAS(o, n float64) bool {
-	return x.v.CAS(math.Float64bits(o), math.Float64bits(n))
-}
-
 // MarshalJSON encodes the wrapped float64 into JSON.
 func (x *Float64) MarshalJSON() ([]byte, error) {
 	return json.Marshal(x.Load())
