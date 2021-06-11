@@ -55,6 +55,12 @@ func (x *Float64) Store(v float64) {
 	x.v.Store(math.Float64bits(v))
 }
 
+// Swap atomically stores the given float64 and returns the old
+// value.
+func (x *Float64) Swap(o float64) float64 {
+	return math.Float64frombits(x.v.Swap(math.Float64bits(o)))
+}
+
 // MarshalJSON encodes the wrapped float64 into JSON.
 func (x *Float64) MarshalJSON() ([]byte, error) {
 	return json.Marshal(x.Load())
