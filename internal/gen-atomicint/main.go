@@ -144,8 +144,8 @@ type {{ .Name }} struct {
 }
 
 // New{{ .Name }} creates a new {{ .Name }}.
-func New{{ .Name }}(i {{ .Wrapped }}) *{{ .Name }} {
-	return &{{ .Name }}{v: i}
+func New{{ .Name }}(val {{ .Wrapped }}) *{{ .Name }} {
+	return &{{ .Name }}{v: val}
 }
 
 // Load atomically loads the wrapped value.
@@ -154,17 +154,17 @@ func (i *{{ .Name }}) Load() {{ .Wrapped }} {
 }
 
 // Add atomically adds to the wrapped {{ .Wrapped }} and returns the new value.
-func (i *{{ .Name }}) Add(n {{ .Wrapped }}) {{ .Wrapped }} {
-	return atomic.Add{{ .Name }}(&i.v, n)
+func (i *{{ .Name }}) Add(delta {{ .Wrapped }}) {{ .Wrapped }} {
+	return atomic.Add{{ .Name }}(&i.v, delta)
 }
 
 // Sub atomically subtracts from the wrapped {{ .Wrapped }} and returns the new value.
-func (i *{{ .Name }}) Sub(n {{ .Wrapped }}) {{ .Wrapped }} {
+func (i *{{ .Name }}) Sub(delta {{ .Wrapped }}) {{ .Wrapped }} {
 	return atomic.Add{{ .Name }}(&i.v,
 		{{- if .Unsigned -}}
-			^(n - 1)
+			^(delta - 1)
 		{{- else -}}
-			-n
+			-delta
 		{{- end -}}
 	)
 }
@@ -180,18 +180,18 @@ func (i *{{ .Name }}) Dec() {{ .Wrapped }} {
 }
 
 // CAS is an atomic compare-and-swap.
-func (i *{{ .Name }}) CAS(old, new {{ .Wrapped }}) bool {
+func (i *{{ .Name }}) CAS(old, new {{ .Wrapped }}) (swapped bool) {
 	return atomic.CompareAndSwap{{ .Name }}(&i.v, old, new)
 }
 
 // Store atomically stores the passed value.
-func (i *{{ .Name }}) Store(n {{ .Wrapped }}) {
-	atomic.Store{{ .Name }}(&i.v, n)
+func (i *{{ .Name }}) Store(val {{ .Wrapped }}) {
+	atomic.Store{{ .Name }}(&i.v, val)
 }
 
 // Swap atomically swaps the wrapped {{ .Wrapped }} and returns the old value.
-func (i *{{ .Name }}) Swap(n {{ .Wrapped }}) {{ .Wrapped }} {
-	return atomic.Swap{{ .Name }}(&i.v, n)
+func (i *{{ .Name }}) Swap(val {{ .Wrapped }}) (old {{ .Wrapped }}) {
+	return atomic.Swap{{ .Name }}(&i.v, val)
 }
 
 // MarshalJSON encodes the wrapped {{ .Wrapped }} into JSON.

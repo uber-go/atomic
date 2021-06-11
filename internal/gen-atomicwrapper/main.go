@@ -240,10 +240,10 @@ var _zero{{ .Name }} {{ .Type }}
 
 
 // New{{ .Name }} creates a new {{ .Name }}.
-func New{{ .Name}}(v {{ .Type }}) *{{ .Name }} {
+func New{{ .Name}}(val {{ .Type }}) *{{ .Name }} {
 	x := &{{ .Name }}{}
-	if v != _zero{{ .Name }} {
-		x.Store(v)
+	if val != _zero{{ .Name }} {
+		x.Store(val)
 	}
 	return x
 }
@@ -261,26 +261,26 @@ func (x *{{ .Name }}) Load() {{ .Type }} {
 }
 
 // Store atomically stores the passed {{ .Type }}.
-func (x *{{ .Name }}) Store(v {{ .Type }}) {
+func (x *{{ .Name }}) Store(val {{ .Type }}) {
 	{{ if .Pack -}}
-		x.v.Store({{ .Pack }}(v))
+		x.v.Store({{ .Pack }}(val))
 	{{- else -}}
-		x.v.Store(v)
+		x.v.Store(val)
 	{{- end }}
 }
 
 {{ if .CAS -}}
 	// CAS is an atomic compare-and-swap for {{ .Type }} values.
-	func (x *{{ .Name }}) CAS(o, n {{ .Type }}) bool {
-		return x.v.CAS({{ .Pack }}(o), {{ .Pack }}(n))
+	func (x *{{ .Name }}) CAS(old, new {{ .Type }}) (swapped bool) {
+		return x.v.CAS({{ .Pack }}(old), {{ .Pack }}(new))
 	}
 {{- end }}
 
 {{ if .Swap -}}
 	// Swap atomically stores the given {{ .Type }} and returns the old
 	// value.
-	func (x *{{ .Name }}) Swap(o {{ .Type }}) {{ .Type }} {
-		return {{ .Unpack }}(x.v.Swap({{ .Pack }}(o)))
+	func (x *{{ .Name }}) Swap(val {{ .Type }}) (old {{ .Type }}) {
+		return {{ .Unpack }}(x.v.Swap({{ .Pack }}(val)))
 	}
 {{- end }}
 
