@@ -58,8 +58,8 @@ func (f *Float64) Sub(delta float64) float64 {
 //   }
 //
 // If CAS did not match NaN to match, then the above would loop forever.
-func (x *Float64) CAS(old, new float64) (swapped bool) {
-	return x.v.CAS(math.Float64bits(old), math.Float64bits(new))
+func (f *Float64) CAS(old, new float64) (swapped bool) {
+	return f.v.CAS(math.Float64bits(old), math.Float64bits(new))
 }
 
 // String encodes the wrapped value as a string.
