@@ -37,11 +37,11 @@ var _zeroTime time.Time
 
 // NewTime creates a new Time.
 func NewTime(t time.Time) *Time {
-	t := &Time{}
-	if val != _zeroTime {
-		t.Store(val)
+	x := &Time{}
+	if t != _zeroTime {
+		x.Store(t)
 	}
-	return t
+	return x
 }
 
 // Load atomically loads the wrapped time.Time.
