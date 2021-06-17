@@ -27,6 +27,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"testing"
+	"time"
 )
 
 const (
@@ -48,6 +49,7 @@ var _stressTests = map[string]func() func(){
 	"string":   stressString,
 	"duration": stressDuration,
 	"error":    stressError,
+	"time":     stressTime,
 }
 
 func TestStress(t *testing.T) {
@@ -270,5 +272,20 @@ func stressError() func() {
 		atom.Store(err2)
 		atom.Load()
 		atom.Store(nil)
+	}
+}
+
+func stressTime() func() {
+	var atom = NewTime(time.Date(2021, 6, 17, 9, 0, 0, 0, time.UTC))
+	var dayAgo = time.Date(2021, 6, 16, 9, 0, 0, 0, time.UTC)
+	var weekAgo = time.Date(2021, 6, 10, 9, 0, 0, 0, time.UTC)
+	return func() {
+		atom.Load()
+		atom.Add(time.Minute)
+		atom.Sub(dayAgo)
+		atom.Store(dayAgo)
+		atom.Load()
+		atom.Add(2 * time.Minute)
+		atom.Store(weekAgo)
 	}
 }
