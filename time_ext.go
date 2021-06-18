@@ -36,18 +36,3 @@ func unpackTime(v interface{}) time.Time {
 	}
 	return time.Time{}
 }
-
-// Add atomically adds to the wrapped time.Time and returns the new value.
-func (t *Time) Add(d time.Duration) time.Time {
-	return t.Load().Add(d)
-}
-
-// Sub atomically subtracts from the wrapped time.Duration and returns the new value.
-func (t *Time) Sub(t2 time.Time) time.Duration {
-	return t.Load().Sub(t2)
-}
-
-// Round atomically rounds the wrapped time.Time and returns the new value.
-func (t *Time) Round(d time.Duration) time.Time {
-	return t.Load().Round(d)
-}

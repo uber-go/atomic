@@ -30,14 +30,9 @@ import (
 
 func TestTime(t *testing.T) {
 	start := time.Date(2021, 6, 17, 9, 10, 0, 0, time.UTC)
-	roundedHr := time.Date(2021, 6, 17, 9, 0, 0, 0, time.UTC)
 	atom := NewTime(start)
 
 	require.Equal(t, start, atom.Load(), "Load didn't work")
-	require.Equal(t, start.Add(time.Minute), atom.Add(time.Minute), "Add didn't work")
-	require.Equal(t, time.Duration(0), atom.Sub(start), "Sub didn't work")
-	require.Equal(t, roundedHr, atom.Round(time.Hour), "Round didn't work")
-
 	require.Equal(t, time.Time{}, NewTime(time.Time{}).Load(), "Default time value is wrong")
 }
 

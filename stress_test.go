@@ -281,11 +281,9 @@ func stressTime() func() {
 	var weekAgo = time.Date(2021, 6, 10, 9, 0, 0, 0, time.UTC)
 	return func() {
 		atom.Load()
-		atom.Add(time.Minute)
-		atom.Sub(dayAgo)
 		atom.Store(dayAgo)
 		atom.Load()
-		atom.Add(2 * time.Minute)
 		atom.Store(weekAgo)
+		atom.Store(time.Time{})
 	}
 }
