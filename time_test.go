@@ -39,10 +39,10 @@ func TestTime(t *testing.T) {
 func TestTimeLocation(t *testing.T) {
 	// Check TZ data hasn't been lost from load/store.
 	ny, err := time.LoadLocation("America/New_York")
-	require.Nil(t, err, "Failed to load location")
+	require.NoError(t, err, "Failed to load location")
 	nyTime := NewTime(time.Date(2021, 1, 1, 0, 0, 0, 0, ny))
 
-	atom := NewTime(time.Time{})
+	var atom Time
 	atom.Store(nyTime.Load())
 
 	assert.Equal(t, ny, atom.Load().Location(), "Location information is wrong")
@@ -52,18 +52,25 @@ func TestLargeTime(t *testing.T) {
 	// Check "large/small" time that are beyond int64 ns
 	// representation (< year 1678 or > year 2262) can be
 	// correctly load/store'd.
-	future := time.Date(2262, 12, 31, 0, 0, 0, 0, time.UTC)
-	past := time.Date(1678, 1, 1, 0, 0, 0, 0, time.UTC)
-	atom := NewTime(future)
+	t.Parallel()
 
-	dayAfterFuture := atom.Load().AddDate(0, 1, 0)
-	atom.Store(dayAfterFuture)
-	assert.Equal(t, 2263, atom.Load().Year())
+	t.Run("future", func(t *testing.T) {
+		future := time.Date(2262, 12, 31, 0, 0, 0, 0, time.UTC)
+		atom := NewTime(future)
+		dayAfterFuture := atom.Load().AddDate(0, 1, 0)
 
-	atom.Store(past)
-	dayBeforePast := atom.Load().AddDate(0, -1, 0)
-	atom.Store(dayBeforePast)
-	assert.Equal(t, 1677, atom.Load().Year())
+		atom.Store(dayAfterFuture)
+		assert.Equal(t, 2263, atom.Load().Year())
+	})
+
+	t.Run("past", func(t *testing.T) {
+		past := time.Date(1678, 1, 1, 0, 0, 0, 0, time.UTC)
+		atom := NewTime(past)
+		dayBeforePast := atom.Load().AddDate(0, -1, 0)
+
+		atom.Store(dayBeforePast)
+		assert.Equal(t, 1677, atom.Load().Year())
+	})
 }
 
 func TestMonotonic(t *testing.T) {
