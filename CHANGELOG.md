@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 ### Added
 - Add `Float64.Swap` to match int atomic operations.
+- Add `atomic.Time` type for atomic operations on `time.Time` values.
 
 ## [1.8.0] - 2021-06-09
 ### Added
