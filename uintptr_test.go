@@ -22,7 +22,7 @@ package atomic
 
 import (
 	"encoding/json"
-	"math"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -69,8 +69,11 @@ func TestUintptr(t *testing.T) {
 	t.Run("String", func(t *testing.T) {
 		// Use an integer with the signed bit set. If we're converting
 		// incorrectly, we'll get a negative value here.
-		atom := NewUintptr(uintptr(math.MaxUint64))
-		assert.Equal(t, "18446744073709551615", atom.String(),
+		// Use an int variable, as constants cause compile-time overflows.
+		negative := -1
+		atom := NewUintptr(uintptr(negative))
+		want := fmt.Sprint(uintptr(negative))
+		assert.Equal(t, want, atom.String(),
 			"String() returned an unexpected value.")
 	})
 }
