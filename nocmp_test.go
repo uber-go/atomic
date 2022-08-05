@@ -96,8 +96,8 @@ func TestNocmpSize(t *testing.T) {
 //
 // We need to allow this so that users can do,
 //
-//   var x atomic.Int32
-//   x = atomic.NewInt32(1)
+//	var x atomic.Int32
+//	x = atomic.NewInt32(1)
 func TestNocmpCopy(t *testing.T) {
 	type foo struct{ _ nocmp }
 

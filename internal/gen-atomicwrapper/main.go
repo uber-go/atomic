@@ -25,25 +25,25 @@
 //
 // Given, atomic.Value and the functions,
 //
-//  func packString(string) interface{}
-//  func unpackString(interface{}) string
+//	func packString(string) interface{}
+//	func unpackString(interface{}) string
 //
 // We can run the following command:
 //
-//  gen-atomicwrapper -name String -wrapped Value \
-//    -type string -pack fromString -unpack tostring
+//	gen-atomicwrapper -name String -wrapped Value \
+//	  -type string -pack fromString -unpack tostring
 //
 // This wil generate approximately,
 //
-//  type String struct{ v Value }
+//	type String struct{ v Value }
 //
-//  func (s *String) Load() string {
-//    return unpackString(v.Load())
-//  }
+//	func (s *String) Load() string {
+//	  return unpackString(v.Load())
+//	}
 //
-//  func (s *String) Store(s string) {
-//    return s.v.Store(packString(s))
-//  }
+//	func (s *String) Store(s string) {
+//	  return s.v.Store(packString(s))
+//	}
 //
 // The packing/unpacking logic allows the stored value to be different from
 // the user-facing value.
