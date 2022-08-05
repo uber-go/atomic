@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Uber Technologies, Inc.
+// Copyright (c) 2020-2022 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -147,14 +147,6 @@ func run(args []string) error {
 		return errors.New("either both, or neither of -pack and -unpack must be specified")
 	}
 
-	if opts.CAS && len(opts.Pack) == 0 {
-		return errors.New("flag -cas requires -pack")
-	}
-
-	if opts.Swap && len(opts.Pack) == 0 {
-		return errors.New("flag -swap requires -pack and -unpack")
-	}
-
 	var w io.Writer = os.Stdout
 	if file := opts.File; len(file) > 0 {
 		f, err := os.Create(file)
@@ -240,7 +232,7 @@ var _zero{{ .Name }} {{ .Type }}
 
 
 // New{{ .Name }} creates a new {{ .Name }}.
-func New{{ .Name}}(val {{ .Type }}) *{{ .Name }} {
+func New{{ .Name }}(val {{ .Type }}) *{{ .Name }} {
 	x := &{{ .Name }}{}
 	if val != _zero{{ .Name }} {
 		x.Store(val)
@@ -272,7 +264,11 @@ func (x *{{ .Name }}) Store(val {{ .Type }}) {
 {{ if .CAS -}}
 	// CAS is an atomic compare-and-swap for {{ .Type }} values.
 	func (x *{{ .Name }}) CAS(old, new {{ .Type }}) (swapped bool) {
-		return x.v.CAS({{ .Pack }}(old), {{ .Pack }}(new))
+		{{ if .Pack -}}
+			return x.v.CAS({{ .Pack }}(old), {{ .Pack }}(new))
+		{{- else -}}{{- /* assume go.uber.org/atomic.Value */ -}}
+			return x.v.CAS(old, new)
+		{{- end }}
 	}
 {{- end }}
 
@@ -280,7 +276,11 @@ func (x *{{ .Name }}) Store(val {{ .Type }}) {
 	// Swap atomically stores the given {{ .Type }} and returns the old
 	// value.
 	func (x *{{ .Name }}) Swap(val {{ .Type }}) (old {{ .Type }}) {
-		return {{ .Unpack }}(x.v.Swap({{ .Pack }}(val)))
+		{{ if .Pack -}}
+			return {{ .Unpack }}(x.v.Swap({{ .Pack }}(val)))
+		{{- else -}}{{- /* assume go.uber.org/atomic.Value */ -}}
+			return x.v.Swap(val).({{ .Type }})
+		{{- end }}
 	}
 {{- end }}
 

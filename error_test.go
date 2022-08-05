@@ -53,3 +53,31 @@ func TestNewErrorWithError(t *testing.T) {
 	atom.Store(err2)
 	require.Equal(t, err2, atom.Load(), "Expected Load to return overridden value")
 }
+
+func TestErrorSwap(t *testing.T) {
+	err1 := errors.New("hello1")
+	err2 := errors.New("hello2")
+
+	atom := NewError(err1)
+	require.Equal(t, err1, atom.Load(), "Expected Load to return initialized value")
+
+	old := atom.Swap(err2)
+	require.Equal(t, err2, atom.Load(), "Expected Load to return overridden value")
+	require.Equal(t, err1, old, "Expected old to be initial value")
+}
+
+func TestErrorCAS(t *testing.T) {
+	err1 := errors.New("hello1")
+	err2 := errors.New("hello2")
+
+	atom := NewError(err1)
+	require.Equal(t, err1, atom.Load(), "Expected Load to return initialized value")
+
+	swapped := atom.CAS(err2, err2)
+	require.Equal(t, swapped, false, "Expected swapped to be false")
+	require.Equal(t, err1, atom.Load(), "Expected Load to return initial value")
+
+	swapped = atom.CAS(err1, err2)
+	require.Equal(t, swapped, true, "Expected swapped to be true")
+	require.Equal(t, err2, atom.Load(), "Expected Load to return overridden value")
+}

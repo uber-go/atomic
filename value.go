@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Uber Technologies, Inc.
+// Copyright (c) 2020-2022 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,4 +28,9 @@ type Value struct {
 	_ nocmp // disallow non-atomic comparison
 
 	atomic.Value
+}
+
+// CAS is an atomic compare-and-swap for Value
+func (v *Value) CAS(old, new interface{}) (swapped bool) {
+	return v.CompareAndSwap(old, new)
 }
