@@ -31,7 +31,7 @@ import (
 // Marks the test as failed if the error cannot be cast into the provided type
 // with errors.As.
 //
-//   assertErrorAsType(t, err, new(ErrFoo))
+//	assertErrorAsType(t, err, new(ErrFoo))
 func assertErrorAsType(t *testing.T, err error, typ interface{}, msgAndArgs ...interface{}) bool {
 	t.Helper()
 
