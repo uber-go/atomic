@@ -54,8 +54,15 @@ func (x *String) Store(val string) {
 }
 
 // CAS is an atomic compare-and-swap for string values.
+//
+// Deprecated: Use CompareAndSwap
 func (x *String) CAS(old, new string) (swapped bool) {
-	return x.v.CAS(old, new)
+	return x.CompareAndSwap(old, new)
+}
+
+// CompareAndSwap is an atomic compare-and-swap for string values.
+func (x *String) CompareAndSwap(old, new string) (swapped bool) {
+	return x.v.CompareAndSwap(old, new)
 }
 
 // Swap atomically stores the given string and returns the old

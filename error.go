@@ -51,8 +51,15 @@ func (x *Error) Store(val error) {
 }
 
 // CAS is an atomic compare-and-swap for error values.
+//
+// Deprecated: Use CompareAndSwap
 func (x *Error) CAS(old, new error) (swapped bool) {
-	return x.v.CAS(packError(old), packError(new))
+	return x.CompareAndSwap(old, new)
+}
+
+// CompareAndSwap is an atomic compare-and-swap for error values.
+func (x *Error) CompareAndSwap(old, new error) (swapped bool) {
+	return x.v.CompareAndSwap(packError(old), packError(new))
 }
 
 // Swap atomically stores the given error and returns the old

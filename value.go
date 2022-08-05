@@ -31,6 +31,8 @@ type Value struct {
 }
 
 // CAS is an atomic compare-and-swap for Value
+//
+// Deprecated: Use CompareAndSwap
 func (v *Value) CAS(old, new interface{}) (swapped bool) {
 	return v.CompareAndSwap(old, new)
 }

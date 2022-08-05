@@ -66,7 +66,14 @@ func (i *Uintptr) Dec() uintptr {
 }
 
 // CAS is an atomic compare-and-swap.
+//
+// Deprecated: Use CompareAndSwap
 func (i *Uintptr) CAS(old, new uintptr) (swapped bool) {
+	return i.CompareAndSwap(old, new)
+}
+
+// CompareAndSwap is an atomic compare-and-swap.
+func (i *Uintptr) CompareAndSwap(old, new uintptr) (swapped bool) {
 	return atomic.CompareAndSwapUintptr(&i.v, old, new)
 }
 

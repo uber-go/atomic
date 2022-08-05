@@ -56,8 +56,15 @@ func (x *Duration) Store(val time.Duration) {
 }
 
 // CAS is an atomic compare-and-swap for time.Duration values.
+//
+// Deprecated: Use CompareAndSwap
 func (x *Duration) CAS(old, new time.Duration) (swapped bool) {
-	return x.v.CAS(int64(old), int64(new))
+	return x.CompareAndSwap(old, new)
+}
+
+// CompareAndSwap is an atomic compare-and-swap for time.Duration values.
+func (x *Duration) CompareAndSwap(old, new time.Duration) (swapped bool) {
+	return x.v.CompareAndSwap(int64(old), int64(new))
 }
 
 // Swap atomically stores the given time.Duration and returns the old

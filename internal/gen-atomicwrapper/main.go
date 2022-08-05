@@ -263,11 +263,18 @@ func (x *{{ .Name }}) Store(val {{ .Type }}) {
 
 {{ if .CAS -}}
 	// CAS is an atomic compare-and-swap for {{ .Type }} values.
+	//
+	// Deprecated: Use CompareAndSwap
 	func (x *{{ .Name }}) CAS(old, new {{ .Type }}) (swapped bool) {
+		return x.CompareAndSwap(old, new)
+	}
+
+	// CompareAndSwap is an atomic compare-and-swap for {{ .Type }} values.
+	func (x *{{ .Name }}) CompareAndSwap(old, new {{ .Type }}) (swapped bool) {
 		{{ if .Pack -}}
-			return x.v.CAS({{ .Pack }}(old), {{ .Pack }}(new))
+			return x.v.CompareAndSwap({{ .Pack }}(old), {{ .Pack }}(new))
 		{{- else -}}{{- /* assume go.uber.org/atomic.Value */ -}}
-			return x.v.CAS(old, new)
+			return x.v.CompareAndSwap(old, new)
 		{{- end }}
 	}
 {{- end }}
