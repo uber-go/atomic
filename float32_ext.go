@@ -49,13 +49,13 @@ func (f *Float32) Sub(delta float32) float32 {
 // but CAS allows a stored NaN to compare equal to a passed in NaN.
 // This avoids typical CAS loops from blocking forever, e.g.,
 //
-//   for {
-//     old := atom.Load()
-//     new = f(old)
-//     if atom.CAS(old, new) {
-//       break
-//     }
-//   }
+//	for {
+//	  old := atom.Load()
+//	  new = f(old)
+//	  if atom.CAS(old, new) {
+//	    break
+//	  }
+//	}
 //
 // If CAS did not match NaN to match, then the above would loop forever.
 func (f *Float32) CAS(old, new float32) (swapped bool) {

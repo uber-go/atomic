@@ -20,7 +20,7 @@
 
 // gen-atomicint generates an atomic wrapper around an integer type.
 //
-//  gen-atomicint -name Int32 -wrapped int32 -file out.go
+//	gen-atomicint -name Int32 -wrapped int32 -file out.go
 //
 // The generated wrapper will use the functions in the sync/atomic package
 // named after the generated type.
