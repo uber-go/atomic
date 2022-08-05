@@ -49,3 +49,14 @@ func (x *Error) Load() error {
 func (x *Error) Store(val error) {
 	x.v.Store(packError(val))
 }
+
+// CompareAndSwap is an atomic compare-and-swap for error values.
+func (x *Error) CompareAndSwap(old, new error) (swapped bool) {
+	return x.v.CompareAndSwap(packError(old), packError(new))
+}
+
+// Swap atomically stores the given error and returns the old
+// value.
+func (x *Error) Swap(val error) (old error) {
+	return unpackError(x.v.Swap(packError(val)))
+}

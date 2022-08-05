@@ -52,3 +52,14 @@ func (x *String) Load() string {
 func (x *String) Store(val string) {
 	x.v.Store(val)
 }
+
+// CompareAndSwap is an atomic compare-and-swap for string values.
+func (x *String) CompareAndSwap(old, new string) (swapped bool) {
+	return x.v.CompareAndSwap(old, new)
+}
+
+// Swap atomically stores the given string and returns the old
+// value.
+func (x *String) Swap(val string) (old string) {
+	return x.v.Swap(val).(string)
+}
