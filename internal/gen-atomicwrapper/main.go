@@ -271,7 +271,7 @@ func (x *{{ .Name }}) Store(val {{ .Type }}) {
 {{ if .CAS -}}
 	// CAS is an atomic compare-and-swap for {{ .Type }} values.
 	//
-	// Deprecated: Use CompareAndSwap
+	// Deprecated: Use CompareAndSwap.
 	func (x *{{ .Name }}) CAS(old, new {{ .Type }}) (swapped bool) {
 		return x.CompareAndSwap(old, new)
 	}

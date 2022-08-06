@@ -67,7 +67,7 @@ func (i *Int32) Dec() int32 {
 
 // CAS is an atomic compare-and-swap.
 //
-// Deprecated: Use CompareAndSwap
+// Deprecated: Use CompareAndSwap.
 func (i *Int32) CAS(old, new int32) (swapped bool) {
 	return i.CompareAndSwap(old, new)
 }

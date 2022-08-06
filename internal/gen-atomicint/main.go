@@ -181,7 +181,7 @@ func (i *{{ .Name }}) Dec() {{ .Wrapped }} {
 
 // CAS is an atomic compare-and-swap.
 //
-// Deprecated: Use CompareAndSwap
+// Deprecated: Use CompareAndSwap.
 func (i *{{ .Name }}) CAS(old, new {{ .Wrapped }}) (swapped bool) {
 	return i.CompareAndSwap(old, new)
 }

@@ -67,7 +67,7 @@ func (i *Uint64) Dec() uint64 {
 
 // CAS is an atomic compare-and-swap.
 //
-// Deprecated: Use CompareAndSwap
+// Deprecated: Use CompareAndSwap.
 func (i *Uint64) CAS(old, new uint64) (swapped bool) {
 	return i.CompareAndSwap(old, new)
 }
