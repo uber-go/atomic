@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Uber Technologies, Inc.
+// Copyright (c) 2020-2022 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -96,9 +96,10 @@ func run(args []string) error {
 		Imports      stringList
 		Pack, Unpack string
 
-		CAS  bool
-		Swap bool
-		JSON bool
+		CAS            bool
+		CompareAndSwap bool
+		Swap           bool
+		JSON           bool
 
 		File   string
 		ToYear int
@@ -129,7 +130,9 @@ func run(args []string) error {
 	// Switches for individual methods. Underlying atomics must support
 	// these.
 	flag.BoolVar(&opts.CAS, "cas", false,
-		"generate a `CAS(old, new) bool` method; requires -pack")
+		"generate a deprecated `CAS(old, new) bool` method; requires -pack")
+	flag.BoolVar(&opts.CompareAndSwap, "compareandswap", false,
+		"generate a `CompareAndSwap(old, new) bool` method; requires -pack")
 	flag.BoolVar(&opts.Swap, "swap", false,
 		"generate a `Swap(new) old` method; requires -pack and -unpack")
 	flag.BoolVar(&opts.JSON, "json", false,
@@ -147,12 +150,8 @@ func run(args []string) error {
 		return errors.New("either both, or neither of -pack and -unpack must be specified")
 	}
 
-	if opts.CAS && len(opts.Pack) == 0 {
-		return errors.New("flag -cas requires -pack")
-	}
-
-	if opts.Swap && len(opts.Pack) == 0 {
-		return errors.New("flag -swap requires -pack and -unpack")
+	if opts.CAS {
+		opts.CompareAndSwap = true
 	}
 
 	var w io.Writer = os.Stdout
@@ -240,7 +239,7 @@ var _zero{{ .Name }} {{ .Type }}
 
 
 // New{{ .Name }} creates a new {{ .Name }}.
-func New{{ .Name}}(val {{ .Type }}) *{{ .Name }} {
+func New{{ .Name }}(val {{ .Type }}) *{{ .Name }} {
 	x := &{{ .Name }}{}
 	if val != _zero{{ .Name }} {
 		x.Store(val)
@@ -271,8 +270,21 @@ func (x *{{ .Name }}) Store(val {{ .Type }}) {
 
 {{ if .CAS -}}
 	// CAS is an atomic compare-and-swap for {{ .Type }} values.
+	//
+	// Deprecated: Use CompareAndSwap.
 	func (x *{{ .Name }}) CAS(old, new {{ .Type }}) (swapped bool) {
-		return x.v.CAS({{ .Pack }}(old), {{ .Pack }}(new))
+		return x.CompareAndSwap(old, new)
+	}
+{{- end }}
+
+{{ if .CompareAndSwap -}}
+	// CompareAndSwap is an atomic compare-and-swap for {{ .Type }} values.
+	func (x *{{ .Name }}) CompareAndSwap(old, new {{ .Type }}) (swapped bool) {
+		{{ if .Pack -}}
+			return x.v.CompareAndSwap({{ .Pack }}(old), {{ .Pack }}(new))
+		{{- else -}}{{- /* assume go.uber.org/atomic.Value */ -}}
+			return x.v.CompareAndSwap(old, new)
+		{{- end }}
 	}
 {{- end }}
 
@@ -280,7 +292,11 @@ func (x *{{ .Name }}) Store(val {{ .Type }}) {
 	// Swap atomically stores the given {{ .Type }} and returns the old
 	// value.
 	func (x *{{ .Name }}) Swap(val {{ .Type }}) (old {{ .Type }}) {
-		return {{ .Unpack }}(x.v.Swap({{ .Pack }}(val)))
+		{{ if .Pack -}}
+			return {{ .Unpack }}(x.v.Swap({{ .Pack }}(val)))
+		{{- else -}}{{- /* assume go.uber.org/atomic.Value */ -}}
+			return x.v.Swap(val).({{ .Type }})
+		{{- end }}
 	}
 {{- end }}
 

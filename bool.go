@@ -55,8 +55,15 @@ func (x *Bool) Store(val bool) {
 }
 
 // CAS is an atomic compare-and-swap for bool values.
+//
+// Deprecated: Use CompareAndSwap.
 func (x *Bool) CAS(old, new bool) (swapped bool) {
-	return x.v.CAS(boolToInt(old), boolToInt(new))
+	return x.CompareAndSwap(old, new)
+}
+
+// CompareAndSwap is an atomic compare-and-swap for bool values.
+func (x *Bool) CompareAndSwap(old, new bool) (swapped bool) {
+	return x.v.CompareAndSwap(boolToInt(old), boolToInt(new))
 }
 
 // Swap atomically stores the given bool and returns the old

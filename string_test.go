@@ -82,4 +82,24 @@ func TestString(t *testing.T) {
 		assert.Equal(t, "foo", atom.String(),
 			"String() returned an unexpected value.")
 	})
+
+	t.Run("CompareAndSwap", func(t *testing.T) {
+		atom := NewString("foo")
+
+		swapped := atom.CompareAndSwap("bar", "bar")
+		require.False(t, swapped, "swapped isn't false")
+		require.Equal(t, atom.Load(), "foo", "Load returned wrong value")
+
+		swapped = atom.CompareAndSwap("foo", "bar")
+		require.True(t, swapped, "swapped isn't true")
+		require.Equal(t, atom.Load(), "bar", "Load returned wrong value")
+	})
+
+	t.Run("Swap", func(t *testing.T) {
+		atom := NewString("foo")
+
+		old := atom.Swap("bar")
+		require.Equal(t, old, "foo", "Swap returned wrong value")
+		require.Equal(t, atom.Load(), "bar", "Load returned wrong value")
+	})
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2020 Uber Technologies, Inc.
+// Copyright (c) 2020-2022 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -180,7 +180,14 @@ func (i *{{ .Name }}) Dec() {{ .Wrapped }} {
 }
 
 // CAS is an atomic compare-and-swap.
+//
+// Deprecated: Use CompareAndSwap.
 func (i *{{ .Name }}) CAS(old, new {{ .Wrapped }}) (swapped bool) {
+	return i.CompareAndSwap(old, new)
+}
+
+// CompareAndSwap is an atomic compare-and-swap.
+func (i *{{ .Name }}) CompareAndSwap(old, new {{ .Wrapped }}) (swapped bool) {
 	return atomic.CompareAndSwap{{ .Name }}(&i.v, old, new)
 }
 
