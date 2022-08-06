@@ -156,7 +156,7 @@ func TestNocmpIntegration(t *testing.T) {
 	var stderr bytes.Buffer
 	cmd := exec.Command("go", "build")
 	cmd.Dir = tempdir
-	// Create a minimal build enviroment with only HOME set so that "go
+	// Create a minimal build environment with only HOME set so that "go
 	// build" has somewhere to put the cache and other Go files in.
 	cmd.Env = []string{"HOME=" + filepath.Join(tempdir, "home")}
 	cmd.Stderr = &stderr
