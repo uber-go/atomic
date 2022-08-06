@@ -87,11 +87,11 @@ func TestString(t *testing.T) {
 		atom := NewString("foo")
 
 		swapped := atom.CompareAndSwap("bar", "bar")
-		require.Equal(t, swapped, false, "swapped isn't false")
+		require.False(t, swapped, "swapped isn't false")
 		require.Equal(t, atom.Load(), "foo", "Load returned wrong value")
 
 		swapped = atom.CompareAndSwap("foo", "bar")
-		require.Equal(t, swapped, true, "swapped isn't true")
+		require.True(t, swapped, "swapped isn't true")
 		require.Equal(t, atom.Load(), "bar", "Load returned wrong value")
 	})
 
