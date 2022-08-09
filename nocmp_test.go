@@ -22,7 +22,6 @@ package atomic
 
 import (
 	"bytes"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -134,23 +133,21 @@ func shouldNotCompile() {
 `
 
 func TestNocmpIntegration(t *testing.T) {
-	tempdir, err := ioutil.TempDir("", "nocmp")
-	require.NoError(t, err, "unable to set up temporary directory")
-	defer os.RemoveAll(tempdir)
+	tempdir := t.TempDir()
 
-	nocmp, err := ioutil.ReadFile("nocmp.go")
+	nocmp, err := os.ReadFile("nocmp.go")
 	require.NoError(t, err, "unable to read nocmp.go")
 
 	require.NoError(t,
-		ioutil.WriteFile(filepath.Join(tempdir, "go.mod"), []byte(_exampleGoMod), 0644),
+		os.WriteFile(filepath.Join(tempdir, "go.mod"), []byte(_exampleGoMod), 0o644),
 		"unable to write go.mod")
 
 	require.NoError(t,
-		ioutil.WriteFile(filepath.Join(tempdir, "nocmp.go"), nocmp, 0644),
+		os.WriteFile(filepath.Join(tempdir, "nocmp.go"), nocmp, 0o644),
 		"unable to write nocmp.go")
 
 	require.NoError(t,
-		ioutil.WriteFile(filepath.Join(tempdir, "bad.go"), []byte(_badFile), 0644),
+		os.WriteFile(filepath.Join(tempdir, "bad.go"), []byte(_badFile), 0o644),
 		"unable to write bad.go")
 
 	var stderr bytes.Buffer
