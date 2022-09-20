@@ -24,6 +24,7 @@
 package atomic
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -88,6 +89,10 @@ func TestPointer(t *testing.T) {
 				atom := tt.newAtomic()
 				atom.Store(&i)
 				require.Equal(t, &i, atom.Load(), "Store didn't set the correct value.")
+			})
+			t.Run("String", func(t *testing.T) {
+				atom := tt.newAtomic()
+				require.Equal(t, fmt.Sprint(tt.initial), atom.String(), "String did not return the correct value.")
 			})
 		})
 	}
