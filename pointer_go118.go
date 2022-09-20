@@ -27,5 +27,5 @@ import "fmt"
 
 // String returns a human readable representation of a Pointer's underlying value.
 func (p *Pointer[T]) String() string {
-	return fmt.Sprint(p.p.Load())
+	return fmt.Sprint(p.Load())
 }
