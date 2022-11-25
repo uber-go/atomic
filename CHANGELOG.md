@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add `String` method to `atomic.Pointer[T]` type allowing users to safely print
 underlying values of pointers.
+- Support JSON serialization and deserialization of `atomic.Time`
 
 ## [1.10.0] - 2022-08-11
 ### Added

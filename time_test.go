@@ -21,6 +21,7 @@
 package atomic
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -70,6 +71,31 @@ func TestLargeTime(t *testing.T) {
 
 		atom.Store(dayBeforePast)
 		assert.Equal(t, 1677, atom.Load().Year())
+	})
+
+	t.Run("JSON/Marshal", func(t *testing.T) {
+		now := time.Now()
+		atom := NewTime(now)
+		bytes, err := json.Marshal(atom)
+		require.NoError(t, err, "json.Marshal errored unexpectedly.")
+
+		oBytes, err := json.Marshal(now)
+		require.NoError(t, err, "json.Marshal errored unexpectedly on the native time.Time.")
+		require.Equal(t, oBytes, bytes, "json.Marshal encoded the wrong bytes.")
+	})
+
+	t.Run("JSON/Unmarshal", func(t *testing.T) {
+		now := time.Now()
+		atom := NewTime(time.Time{})
+
+		oBytes, err := json.Marshal(now)
+		require.NoError(t, err, "json.Marshal errored unexpectedly on the native time.Time.")
+		err = json.Unmarshal(oBytes, &atom)
+		require.NoError(t, err, "json.Unmarshal errored unexpectedly.")
+		// NOTE: https://pkg.go.dev/time#Time.MarshalJSON, the time is formatted as RFC 3339
+		// example: 2022-11-25T21:06:44.6023404+01:00
+		// So we cannot compare now and atom.Load() because we lack nanoseconds
+		require.Equal(t, now.UnixMicro(), atom.Load().UnixMicro(), "json.Unmarshal didn't set the correct value.")
 	})
 }
 
