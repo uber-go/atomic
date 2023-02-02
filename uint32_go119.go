@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-//go:build !go1.19
-// +build !go1.19
+//go:build go1.19
+// +build go1.19
 
 package atomic
 
@@ -35,27 +35,29 @@ import (
 type Uint32 struct {
 	_ nocmp // disallow non-atomic comparison
 
-	v uint32
+	v atomic.Uint32
 }
 
 // NewUint32 creates a new Uint32.
 func NewUint32(val uint32) *Uint32 {
-	return &Uint32{v: val}
+	i := &Uint32{}
+	i.Store(val)
+	return i
 }
 
 // Load atomically loads the wrapped value.
 func (i *Uint32) Load() uint32 {
-	return atomic.LoadUint32(&i.v)
+	return i.v.Load()
 }
 
 // Add atomically adds to the wrapped uint32 and returns the new value.
 func (i *Uint32) Add(delta uint32) uint32 {
-	return atomic.AddUint32(&i.v, delta)
+	return i.v.Add(delta)
 }
 
 // Sub atomically subtracts from the wrapped uint32 and returns the new value.
 func (i *Uint32) Sub(delta uint32) uint32 {
-	return atomic.AddUint32(&i.v, ^(delta - 1))
+	return i.v.Add(^(delta - 1))
 }
 
 // Inc atomically increments the wrapped uint32 and returns the new value.
@@ -77,17 +79,17 @@ func (i *Uint32) CAS(old, new uint32) (swapped bool) {
 
 // CompareAndSwap is an atomic compare-and-swap.
 func (i *Uint32) CompareAndSwap(old, new uint32) (swapped bool) {
-	return atomic.CompareAndSwapUint32(&i.v, old, new)
+	return i.v.CompareAndSwap(old, new)
 }
 
 // Store atomically stores the passed value.
 func (i *Uint32) Store(val uint32) {
-	atomic.StoreUint32(&i.v, val)
+	i.v.Store(val)
 }
 
 // Swap atomically swaps the wrapped uint32 and returns the old value.
 func (i *Uint32) Swap(val uint32) (old uint32) {
-	return atomic.SwapUint32(&i.v, val)
+	return i.v.Swap(val)
 }
 
 // MarshalJSON encodes the wrapped uint32 into JSON.
