@@ -95,7 +95,10 @@ func (x *{{ .Name }}) Store(val {{ .Type }}) {
 		{{ if .Pack -}}
 			return {{ .Unpack }}(x.v.Swap({{ .Pack }}(val)))
 		{{- else -}}{{- /* assume go.uber.org/atomic.Value */ -}}
-			return x.v.Swap(val).({{ .Type }})
+			if v := x.v.Swap(val); v != nil {
+				return v.({{ .Type }})
+			}
+			return _zero{{ .Name }}
 		{{- end }}
 	}
 {{- end }}
