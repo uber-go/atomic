@@ -34,9 +34,7 @@ var _zeroString string
 // NewString creates a new String.
 func NewString(val string) *String {
 	x := &String{}
-	if val != _zeroString {
-		x.Store(val)
-	}
+	x.Store(val)
 	return x
 }
 
