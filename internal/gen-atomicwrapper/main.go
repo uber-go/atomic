@@ -47,9 +47,6 @@
 //
 // The packing/unpacking logic allows the stored value to be different from
 // the user-facing value.
-//
-// Without -pack and -unpack, the output will be cast to the target type,
-// defaulting to the zero value.
 package main
 
 import (
@@ -143,12 +140,12 @@ func run(args []string) error {
 		return err
 	}
 
-	if len(opts.Name) == 0 || len(opts.Wrapped) == 0 || len(opts.Type) == 0 {
-		return errors.New("flags -name, -wrapped, and -type are required")
-	}
-
-	if (len(opts.Pack) == 0) != (len(opts.Unpack) == 0) {
-		return errors.New("either both, or neither of -pack and -unpack must be specified")
+	if len(opts.Name) == 0 ||
+		len(opts.Wrapped) == 0 ||
+		len(opts.Type) == 0 ||
+		len(opts.Pack) == 0 ||
+		len(opts.Unpack) == 0 {
+		return errors.New("flags -name, -wrapped, -pack, -unpack and -type are required")
 	}
 
 	if opts.CAS {

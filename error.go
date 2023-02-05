@@ -52,7 +52,17 @@ func (x *Error) Store(val error) {
 
 // CompareAndSwap is an atomic compare-and-swap for error values.
 func (x *Error) CompareAndSwap(old, new error) (swapped bool) {
-	return x.v.CompareAndSwap(packError(old), packError(new))
+	if x.v.CompareAndSwap(packError(old), packError(new)) {
+		return true
+	}
+
+	if old == _zeroError {
+		// If the old value is the empty value, then it's possible the
+		// underlying Value hasn't been set and is nil, so retry with nil.
+		return x.v.CompareAndSwap(nil, packError(new))
+	}
+
+	return false
 }
 
 // Swap atomically stores the given error and returns the old
