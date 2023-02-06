@@ -61,11 +61,7 @@ func (x *{{ .Name }}) Load() {{ .Type }} {
 
 // Store atomically stores the passed {{ .Type }}.
 func (x *{{ .Name }}) Store(val {{ .Type }}) {
-	{{ if .Pack -}}
-		x.v.Store({{ .Pack }}(val))
-	{{- else -}}
-		x.v.Store(val)
-	{{- end }}
+	x.v.Store({{ .Pack }}(val))
 }
 
 {{ if .CAS -}}
@@ -80,10 +76,20 @@ func (x *{{ .Name }}) Store(val {{ .Type }}) {
 {{ if .CompareAndSwap -}}
 	// CompareAndSwap is an atomic compare-and-swap for {{ .Type }} values.
 	func (x *{{ .Name }}) CompareAndSwap(old, new {{ .Type }}) (swapped bool) {
-		{{ if .Pack -}}
+	 	{{ if eq .Wrapped "Value" -}}
+			if x.v.CompareAndSwap({{ .Pack }}(old), {{ .Pack }}(new)) {
+				return true
+			}
+
+			if old == _zero{{ .Name }} {
+				// If the old value is the empty value, then it's possible the 
+				// underlying Value hasn't been set and is nil, so retry with nil.
+				return x.v.CompareAndSwap(nil, {{ .Pack }}(new))
+			}
+
+			return false
+		{{- else -}}
 			return x.v.CompareAndSwap({{ .Pack }}(old), {{ .Pack }}(new))
-		{{- else -}}{{- /* assume go.uber.org/atomic.Value */ -}}
-			return x.v.CompareAndSwap(old, new)
 		{{- end }}
 	}
 {{- end }}
@@ -92,11 +98,7 @@ func (x *{{ .Name }}) Store(val {{ .Type }}) {
 	// Swap atomically stores the given {{ .Type }} and returns the old
 	// value.
 	func (x *{{ .Name }}) Swap(val {{ .Type }}) (old {{ .Type }}) {
-		{{ if .Pack -}}
-			return {{ .Unpack }}(x.v.Swap({{ .Pack }}(val)))
-		{{- else -}}{{- /* assume go.uber.org/atomic.Value */ -}}
-			return x.v.Swap(val).({{ .Type }})
-		{{- end }}
+		return {{ .Unpack }}(x.v.Swap({{ .Pack }}(val)))
 	}
 {{- end }}
 

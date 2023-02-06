@@ -103,3 +103,67 @@ func TestString(t *testing.T) {
 		require.Equal(t, atom.Load(), "bar", "Load returned wrong value")
 	})
 }
+
+func TestString_InitializeDefault(t *testing.T) {
+	tests := []struct {
+		msg    string
+		newStr func() *String
+	}{
+		{
+			msg: "Uninitialized",
+			newStr: func() *String {
+				var s String
+				return &s
+			},
+		},
+		{
+			msg: "NewString with default",
+			newStr: func() *String {
+				return NewString("")
+			},
+		},
+		{
+			msg: "String swapped with default",
+			newStr: func() *String {
+				s := NewString("initial")
+				s.Swap("")
+				return s
+			},
+		},
+		{
+			msg: "String CAS'd with default",
+			newStr: func() *String {
+				s := NewString("initial")
+				s.CompareAndSwap("initial", "")
+				return s
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.msg, func(t *testing.T) {
+			t.Run("MarshalText", func(t *testing.T) {
+				str := tt.newStr()
+				text, err := str.MarshalText()
+				require.NoError(t, err)
+				assert.Equal(t, "", string(text), "")
+			})
+
+			t.Run("String", func(t *testing.T) {
+				str := tt.newStr()
+				assert.Equal(t, "", str.String())
+			})
+
+			t.Run("CompareAndSwap", func(t *testing.T) {
+				str := tt.newStr()
+				require.True(t, str.CompareAndSwap("", "new"))
+				assert.Equal(t, "new", str.Load())
+			})
+
+			t.Run("Swap", func(t *testing.T) {
+				str := tt.newStr()
+				assert.Equal(t, "", str.Swap("new"))
+			})
+		})
+	}
+}
