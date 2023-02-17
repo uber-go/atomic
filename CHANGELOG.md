@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `MarshalJSON` and `UnmarshalJSON` method to `atomic.Pointer[T]` type
 allowing users to use pointer with json.
 
+### Changed
+- Change a comment that marks generated Go code. Now it matches the regexp
+`^// Code generated .* DO NOT EDIT\.$` according to common Go standard.
+
 ## [1.11.0] - 2023-05-02
 ### Fixed
 - Fix `Swap` and `CompareAndSwap` for `Value` wrappers without initialization.
