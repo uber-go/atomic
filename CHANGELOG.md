@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.11.0] - 2023-05-02
 ### Fixed
-- Fix initialization of `Value` wrappers.
+- Fix `Swap` and `CompareAndSwap` for `Value` wrappers without initialization.
 
 ### Added
 - Add `String` method to `atomic.Pointer[T]` type allowing users to safely print
