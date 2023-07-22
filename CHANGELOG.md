@@ -5,12 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+- No changes yet.
+
+### Changed
+- Change a comment that marks generated Go code. Now it matches the regexp `^// Code generated .* DO NOT EDIT\.$` according to common Go standard.
+
+## [1.11.0] - 2023-05-02
+### Fixed
+- Fix `Swap` and `CompareAndSwap` for `Value` wrappers without initialization.
+
 ### Added
 - Add `String` method to `atomic.Pointer[T]` type allowing users to safely print
 underlying values of pointers.
 
-### Changed
-- Change a comment that marks generated Go code. Now it matches the regexp `^// Code generated .* DO NOT EDIT\.$` according to common Go standard.
+[1.11.0]: https://github.com/uber-go/atomic/compare/v1.10.0...v1.11.0
 
 ## [1.10.0] - 2022-08-11
 ### Added
