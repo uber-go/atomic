@@ -28,7 +28,7 @@ jobs:
         go-version: ${{ matrix.go }}
 
     - name: Checkout code
-      uses: actions/checkout@1e31de5234b9f8995739874a8ce0492dc87873e2 # v4.0.0
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
     - name: Load cached dependencies
       uses: actions/cache@704facf57e6136b1bc63b828d79edcd491f0ee84 # v.3.3.2
