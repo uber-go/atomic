@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `String` method to `atomic.Pointer[T]` type allowing users to safely print
 underlying values of pointers.
 
+[1.11.0]: https://github.com/uber-go/atomic/compare/v1.10.0...v1.11.0
+
 ## [1.10.0] - 2022-08-11
 ### Added
 - Add `atomic.Float32` type for atomic operations on `float32`.
