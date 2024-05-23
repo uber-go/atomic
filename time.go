@@ -23,6 +23,7 @@
 package atomic
 
 import (
+	"encoding/json"
 	"time"
 )
 
@@ -52,4 +53,19 @@ func (x *Time) Load() time.Time {
 // Store atomically stores the passed time.Time.
 func (x *Time) Store(val time.Time) {
 	x.v.Store(packTime(val))
+}
+
+// MarshalJSON encodes the wrapped time.Time into JSON.
+func (x *Time) MarshalJSON() ([]byte, error) {
+	return json.Marshal(x.Load())
+}
+
+// UnmarshalJSON decodes a time.Time from JSON.
+func (x *Time) UnmarshalJSON(b []byte) error {
+	var v time.Time
+	if err := json.Unmarshal(b, &v); err != nil {
+		return err
+	}
+	x.Store(v)
+	return nil
 }
