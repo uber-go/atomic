@@ -24,6 +24,7 @@
 package atomic
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 
@@ -31,7 +32,9 @@ import (
 )
 
 func TestPointer(t *testing.T) {
-	type foo struct{ v int }
+	type foo struct {
+		V int `json:"v"`
+	}
 
 	i := foo{42}
 	j := foo{0}
@@ -94,6 +97,22 @@ func TestPointer(t *testing.T) {
 				atom := tt.newAtomic()
 				require.Equal(t, fmt.Sprint(tt.initial), atom.String(), "String did not return the correct value.")
 			})
+
+			t.Run("MarshalJSON", func(t *testing.T) {
+				atom := tt.newAtomic()
+				marshaledPointer, err := json.Marshal(atom)
+				require.NoError(t, err)
+				marshaledRaw, err := json.Marshal(tt.initial)
+				require.NoError(t, err)
+				require.Equal(t, marshaledRaw, marshaledPointer, "MarshalJSON did not return the correct value.")
+			})
 		})
 	}
+
+	t.Run("UnmarshalJSON", func(t *testing.T) {
+		var p Pointer[foo]
+
+		require.NoError(t, json.Unmarshal([]byte(`{"v":1024}`), &p))
+		require.Equal(t, 1024, p.Load().V, "UnmarshalJSON should have expected result")
+	})
 }
