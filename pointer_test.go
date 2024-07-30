@@ -115,4 +115,10 @@ func TestPointer(t *testing.T) {
 		require.NoError(t, json.Unmarshal([]byte(`{"v":1024}`), &p))
 		require.Equal(t, 1024, p.Load().V, "UnmarshalJSON should have expected result")
 	})
+
+	t.Run("UnmarshalJSON error", func(t *testing.T) {
+		var p Pointer[foo]
+
+		require.Error(t, json.Unmarshal([]byte(`{"v":true}`), &p), "json.Unmarshal should return an error")
+	})
 }
