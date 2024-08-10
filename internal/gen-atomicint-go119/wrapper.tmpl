@@ -18,8 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-//go:build !go1.19
-// +build !go1.19
+//go:build go1.19
+// +build go1.19
 
 package atomic
 
@@ -33,27 +33,29 @@ import (
 type {{ .Name }} struct {
 	_ nocmp // disallow non-atomic comparison
 
-	v {{ .Wrapped }}
+	v atomic.{{ .Name }}
 }
 
 // New{{ .Name }} creates a new {{ .Name }}.
 func New{{ .Name }}(val {{ .Wrapped }}) *{{ .Name }} {
-	return &{{ .Name }}{v: val}
+    i := &{{ .Name }}{}
+    i.Store(val)
+    return i
 }
 
 // Load atomically loads the wrapped value.
 func (i *{{ .Name }}) Load() {{ .Wrapped }} {
-	return atomic.Load{{ .Name }}(&i.v)
+	return i.v.Load()
 }
 
 // Add atomically adds to the wrapped {{ .Wrapped }} and returns the new value.
 func (i *{{ .Name }}) Add(delta {{ .Wrapped }}) {{ .Wrapped }} {
-	return atomic.Add{{ .Name }}(&i.v, delta)
+	return i.v.Add(delta)
 }
 
 // Sub atomically subtracts from the wrapped {{ .Wrapped }} and returns the new value.
 func (i *{{ .Name }}) Sub(delta {{ .Wrapped }}) {{ .Wrapped }} {
-	return atomic.Add{{ .Name }}(&i.v,
+	return  i.v.Add(
 		{{- if .Unsigned -}}
 			^(delta - 1)
 		{{- else -}}
@@ -81,17 +83,17 @@ func (i *{{ .Name }}) CAS(old, new {{ .Wrapped }}) (swapped bool) {
 
 // CompareAndSwap is an atomic compare-and-swap.
 func (i *{{ .Name }}) CompareAndSwap(old, new {{ .Wrapped }}) (swapped bool) {
-	return atomic.CompareAndSwap{{ .Name }}(&i.v, old, new)
+	return i.v.CompareAndSwap(old, new)
 }
 
 // Store atomically stores the passed value.
 func (i *{{ .Name }}) Store(val {{ .Wrapped }}) {
-	atomic.Store{{ .Name }}(&i.v, val)
+	i.v.Store(val)
 }
 
 // Swap atomically swaps the wrapped {{ .Wrapped }} and returns the old value.
 func (i *{{ .Name }}) Swap(val {{ .Wrapped }}) (old {{ .Wrapped }}) {
-	return atomic.Swap{{ .Name }}(&i.v, val)
+	return i.v.Swap(val)
 }
 
 // MarshalJSON encodes the wrapped {{ .Wrapped }} into JSON.
