@@ -22,7 +22,7 @@ package atomic
 
 import "time"
 
-//go:generate bin/gen-atomicwrapper -name=Time -type=time.Time -wrapped=Value -pack=packTime -unpack=unpackTime -imports time -file=time.go
+//go:generate bin/gen-atomicwrapper -name=Time -type=time.Time -wrapped=Value -pack=packTime -unpack=unpackTime -json -imports time -file=time.go
 
 func packTime(t time.Time) interface{} {
 	return t
