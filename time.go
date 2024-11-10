@@ -54,12 +54,12 @@ func (x *Time) Store(val time.Time) {
 	x.v.Store(packTime(val))
 }
 
-// MarshalText encodes the wrapped time.Time into JSON.
+// MarshalText encodes the wrapped time.Time into string.
 func (x *Time) MarshalText() ([]byte, error) {
 	return x.Load().MarshalText()
 }
 
-// UnmarshalText decodes a time.Time from JSON.
+// UnmarshalText decodes a time.Time from string.
 func (x *Time) UnmarshalText(b []byte) error {
 	var v time.Time
 	if err := v.UnmarshalText(b); err != nil {
