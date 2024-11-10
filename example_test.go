@@ -33,7 +33,7 @@ func Example() {
 	// The wrapper ensures that all operations are atomic.
 	atom.Store(42)
 	fmt.Println(atom.Inc())
-	fmt.Println(atom.CAS(43, 0))
+	fmt.Println(atom.CompareAndSwap(43, 0))
 	fmt.Println(atom.Load())
 
 	// Output:

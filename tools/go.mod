@@ -4,13 +4,13 @@ go 1.18
 
 require (
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
-	honnef.co/go/tools v0.3.3
+	honnef.co/go/tools v0.4.7
 )
 
 require (
-	github.com/BurntSushi/toml v1.2.0 // indirect
-	golang.org/x/exp/typeparams v0.0.0-20220722155223-a9213eeb770e // indirect
-	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
-	golang.org/x/sys v0.0.0-20220808155132-1c4a2a72c664 // indirect
-	golang.org/x/tools v0.1.12 // indirect
+	github.com/BurntSushi/toml v1.2.1 // indirect
+	golang.org/x/exp/typeparams v0.0.0-20221208152030-732eee02a75a // indirect
+	golang.org/x/mod v0.12.0 // indirect
+	golang.org/x/sys v0.11.0 // indirect
+	golang.org/x/tools v0.12.1-0.20230825192346-2191a27a6dc5 // indirect
 )
