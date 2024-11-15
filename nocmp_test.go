@@ -69,7 +69,7 @@ func TestNocmpComparability(t *testing.T) {
 		t.Run(tt.desc, func(t *testing.T) {
 			typ := reflect.TypeOf(tt.give)
 			assert.Equalf(t, tt.comparable, typ.Comparable(),
-				"type %v comparablity mismatch", typ)
+				"type %v comparability mismatch", typ)
 		})
 	}
 }
