@@ -33,7 +33,7 @@
 //	gen-atomicwrapper -name String -wrapped Value \
 //	  -type string -pack fromString -unpack tostring
 //
-// This wil generate approximately,
+// This will generate approximately,
 //
 //	type String struct{ v Value }
 //
@@ -134,7 +134,7 @@ func run(args []string) error {
 	flag.BoolVar(&opts.Swap, "swap", false,
 		"generate a `Swap(new) old` method; requires -pack and -unpack")
 	flag.BoolVar(&opts.JSON, "json", false,
-		"generate `MarshalJSON/UnmarshJSON` methods")
+		"generate `MarshalJSON/UnmarshalJSON` methods")
 
 	if err := flag.Parse(args); err != nil {
 		return err
