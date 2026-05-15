@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add `MarshalJSON` and `UnmarshalJSON` method to `atomic.Pointer[T]` type
 allowing users to use pointer with json.
+- Add `MarshalJSON` and `UnmarshalJSON` methods to `atomic.Time` so it
+encodes and decodes the wrapped `time.Time` instead of an empty struct.
 
 ## [1.11.0] - 2023-05-02
 ### Fixed

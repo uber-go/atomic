@@ -21,6 +21,7 @@
 package atomic
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -46,6 +47,55 @@ func TestTimeLocation(t *testing.T) {
 	atom.Store(nyTime.Load())
 
 	assert.Equal(t, ny, atom.Load().Location(), "Location information is wrong")
+}
+
+func TestTimeJSON(t *testing.T) {
+	start := time.Date(2021, 6, 17, 9, 10, 0, 0, time.UTC)
+	atom := NewTime(start)
+
+	t.Run("MarshalJSON", func(t *testing.T) {
+		marshalled, err := atom.MarshalJSON()
+		require.NoError(t, err)
+
+		// Compare against time.Time's own JSON encoding so we stay aligned with
+		// the standard library regardless of how it chooses to format times.
+		wanted, err := json.Marshal(start)
+		require.NoError(t, err)
+		assert.Equal(t, string(wanted), string(marshalled))
+	})
+
+	t.Run("UnmarshalJSON", func(t *testing.T) {
+		raw, err := json.Marshal(start)
+		require.NoError(t, err)
+
+		var got Time
+		require.NoError(t, got.UnmarshalJSON(raw))
+		assert.Equal(t, start.UTC(), got.Load().UTC())
+	})
+
+	t.Run("RoundTripInsideStruct", func(t *testing.T) {
+		// This is the case from #124: atomic.Time was being silently encoded
+		// as `{}` because it had no MarshalJSON.
+		type Container struct {
+			Plain      time.Time
+			Atomic     *Time
+			AtomicNil  *Time
+			AtomicZero *Time
+		}
+		c := Container{
+			Plain:      start,
+			Atomic:     atom,
+			AtomicZero: NewTime(time.Time{}),
+		}
+
+		blob, err := json.Marshal(c)
+		require.NoError(t, err)
+
+		var decoded Container
+		require.NoError(t, json.Unmarshal(blob, &decoded))
+		assert.Equal(t, c.Plain.UTC(), decoded.Plain.UTC())
+		assert.Equal(t, c.Atomic.Load().UTC(), decoded.Atomic.Load().UTC())
+	})
 }
 
 func TestLargeTime(t *testing.T) {
