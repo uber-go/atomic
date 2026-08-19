@@ -37,4 +37,6 @@ func TestValue(t *testing.T) {
 	assert.Equal(t, 84, v.Load())
 
 	assert.Panics(t, func() { v.Store("foo") })
+	assert.Panics(t, func() { v.Store(nil) })
 }
+
