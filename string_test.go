@@ -77,6 +77,18 @@ func TestString(t *testing.T) {
 		require.Equal(t, "bar", atom.Load(), "xml.Unmarshal didn't set the correct value.")
 	})
 
+	t.Run("Text/MarshalUnmarshal", func(t *testing.T) {
+		atom := NewString("hello")
+		bytes, err := atom.MarshalText()
+		require.NoError(t, err)
+		require.Equal(t, []byte("hello"), bytes)
+
+		var atom2 String
+		err = atom2.UnmarshalText([]byte("world"))
+		require.NoError(t, err)
+		require.Equal(t, "world", atom2.Load())
+	})
+
 	t.Run("String", func(t *testing.T) {
 		atom := NewString("foo")
 		assert.Equal(t, "foo", atom.String(),
