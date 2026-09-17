@@ -39,4 +39,3 @@ func TestValue(t *testing.T) {
 	assert.Panics(t, func() { v.Store("foo") })
 	assert.Panics(t, func() { v.Store(nil) })
 }
-
