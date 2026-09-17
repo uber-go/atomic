@@ -4,13 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [1.12.0] - 2026-09-17
 ### Added
 - Add `MarshalJSON` and `UnmarshalJSON` method to `atomic.Pointer[T]` type
 allowing users to use pointer with json.
 
 ### Updated
 - Bumped https://github.com/stretchr/testify to v1.12.1.
+
+[1.12.0]: https://github.com/uber-go/atomic/compare/v1.11.0...v1.12.0
 
 ## [1.11.0] - 2023-05-02
 ### Fixed
