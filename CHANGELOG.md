@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `MarshalJSON` and `UnmarshalJSON` method to `atomic.Pointer[T]` type
 allowing users to use pointer with json.
 
+### Updated
+- Bumped https://github.com/stretchr/testify to v1.12.1.
+
 ## [1.11.0] - 2023-05-02
 ### Fixed
 - Fix `Swap` and `CompareAndSwap` for `Value` wrappers without initialization.
