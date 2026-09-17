@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-//go:build !go1.19
+//go:build go1.19
 
 package atomic
 
@@ -34,27 +34,29 @@ import (
 type Int64 struct {
 	_ nocmp // disallow non-atomic comparison
 
-	v int64
+	v atomic.Int64
 }
 
 // NewInt64 creates a new Int64.
 func NewInt64(val int64) *Int64 {
-	return &Int64{v: val}
+	i := &Int64{}
+	i.Store(val)
+	return i
 }
 
 // Load atomically loads the wrapped value.
 func (i *Int64) Load() int64 {
-	return atomic.LoadInt64(&i.v)
+	return i.v.Load()
 }
 
 // Add atomically adds to the wrapped int64 and returns the new value.
 func (i *Int64) Add(delta int64) int64 {
-	return atomic.AddInt64(&i.v, delta)
+	return i.v.Add(delta)
 }
 
 // Sub atomically subtracts from the wrapped int64 and returns the new value.
 func (i *Int64) Sub(delta int64) int64 {
-	return atomic.AddInt64(&i.v, -delta)
+	return i.v.Add(-delta)
 }
 
 // Inc atomically increments the wrapped int64 and returns the new value.
@@ -76,17 +78,17 @@ func (i *Int64) CAS(old, new int64) (swapped bool) {
 
 // CompareAndSwap is an atomic compare-and-swap.
 func (i *Int64) CompareAndSwap(old, new int64) (swapped bool) {
-	return atomic.CompareAndSwapInt64(&i.v, old, new)
+	return i.v.CompareAndSwap(old, new)
 }
 
 // Store atomically stores the passed value.
 func (i *Int64) Store(val int64) {
-	atomic.StoreInt64(&i.v, val)
+	i.v.Store(val)
 }
 
 // Swap atomically swaps the wrapped int64 and returns the old value.
 func (i *Int64) Swap(val int64) (old int64) {
-	return atomic.SwapInt64(&i.v, val)
+	return i.v.Swap(val)
 }
 
 // MarshalJSON encodes the wrapped int64 into JSON.
