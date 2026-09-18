@@ -73,6 +73,16 @@ func TestTimeJSON(t *testing.T) {
 		assert.Equal(t, start.UTC(), got.Load().UTC())
 	})
 
+	t.Run("UnmarshalJSONError", func(t *testing.T) {
+		// A well-formed JSON string that isn't a valid RFC 3339 timestamp
+		// makes the wrapped time.Time fail to decode; UnmarshalJSON must
+		// surface that error instead of swallowing it and leave the value
+		// untouched.
+		var got Time
+		require.Error(t, got.UnmarshalJSON([]byte(`"not-a-timestamp"`)))
+		assert.True(t, got.Load().IsZero(), "value should be untouched on error")
+	})
+
 	t.Run("RoundTripInsideStruct", func(t *testing.T) {
 		// This is the case from #124: atomic.Time was being silently encoded
 		// as `{}` because it had no MarshalJSON.
