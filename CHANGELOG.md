@@ -23,6 +23,7 @@ encodes and decodes the wrapped `time.Time` instead of an empty struct.
 ### Added
 - Add `String` method to `atomic.Pointer[T]` type allowing users to safely print
 underlying values of pointers.
+- Support JSON serialization and deserialization of `atomic.Time`
 
 [1.11.0]: https://github.com/uber-go/atomic/compare/v1.10.0...v1.11.0
 
