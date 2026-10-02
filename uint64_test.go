@@ -73,4 +73,15 @@ func TestUint64(t *testing.T) {
 		assert.Equal(t, "18446744073709551615", atom.String(),
 			"String() returned an unexpected value.")
 	})
+
+	t.Run("Alignment", func(t *testing.T) {
+		type wrapper struct {
+			_ byte
+			v Uint64
+		}
+		s := &wrapper{}
+		assert.Equal(t, uint64(0), s.v.Load())
+		s.v.Store(42)
+		assert.Equal(t, uint64(42), s.v.Load())
+	})
 }
