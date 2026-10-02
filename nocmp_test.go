@@ -60,6 +60,8 @@ func TestNocmpComparability(t *testing.T) {
 		{desc: "Int32", give: Int32{}},
 		{desc: "Int64", give: Int64{}},
 		{desc: "String", give: String{}},
+		{desc: "Uint8", give: Uint8{}},
+		{desc: "Uint16", give: Uint16{}},
 		{desc: "Uint32", give: Uint32{}},
 		{desc: "Uint64", give: Uint64{}},
 		{desc: "Value", give: Value{}},
