@@ -69,4 +69,15 @@ func TestDuration(t *testing.T) {
 		assert.Equal(t, "42s", NewDuration(42*time.Second).String(),
 			"String() returned an unexpected value.")
 	})
+
+	t.Run("Alignment", func(t *testing.T) {
+		type wrapper struct {
+			_ byte
+			v Duration
+		}
+		s := &wrapper{}
+		assert.Equal(t, time.Duration(0), s.v.Load())
+		s.v.Store(42 * time.Second)
+		assert.Equal(t, 42*time.Second, s.v.Load())
+	})
 }

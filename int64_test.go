@@ -79,4 +79,15 @@ func TestInt64(t *testing.T) {
 				"String() returned an unexpected value.")
 		})
 	})
+
+	t.Run("Alignment", func(t *testing.T) {
+		type wrapper struct {
+			_ byte
+			v Int64
+		}
+		s := &wrapper{}
+		assert.Equal(t, int64(0), s.v.Load())
+		s.v.Store(42)
+		assert.Equal(t, int64(42), s.v.Load())
+	})
 }

@@ -69,4 +69,15 @@ func TestFloat64(t *testing.T) {
 		assert.Equal(t, "42.5", NewFloat64(42.5).String(),
 			"String() returned an unexpected value.")
 	})
+
+	t.Run("Alignment", func(t *testing.T) {
+		type wrapper struct {
+			_ byte
+			v Float64
+		}
+		s := &wrapper{}
+		assert.Equal(t, float64(0), s.v.Load())
+		s.v.Store(42.5)
+		assert.Equal(t, 42.5, s.v.Load())
+	})
 }
