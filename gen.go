@@ -25,3 +25,8 @@ package atomic
 //go:generate bin/gen-atomicint -name=Uint32 -wrapped=uint32 -unsigned -file=uint32.go
 //go:generate bin/gen-atomicint -name=Uint64 -wrapped=uint64 -unsigned -file=uint64.go
 //go:generate bin/gen-atomicint -name=Uintptr -wrapped=uintptr -unsigned -file=uintptr.go
+//go:generate bin/gen-atomicint-go119 -name=Int32 -wrapped=int32 -file=int32_go119.go
+//go:generate bin/gen-atomicint-go119 -name=Int64 -wrapped=int64 -file=int64_go119.go
+//go:generate bin/gen-atomicint-go119 -name=Uint32 -wrapped=uint32 -unsigned -file=uint32_go119.go
+//go:generate bin/gen-atomicint-go119 -name=Uint64 -wrapped=uint64 -unsigned -file=uint64_go119.go
+//go:generate bin/gen-atomicint-go119 -name=Uintptr -wrapped=uintptr -unsigned -file=uintptr_go119.go
