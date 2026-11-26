@@ -32,6 +32,11 @@ import (
 type Int64 struct {
 	_ nocmp // disallow non-atomic comparison
 
+	// Zero-length array of a 64-bit aligned type. On 32-bit platforms
+	// int64 is only 32-bit aligned, so without this the wrapper can be
+	// placed at an address that the 64-bit sync/atomic primitives reject.
+	_ [0]atomic.Int64
+
 	v int64
 }
 

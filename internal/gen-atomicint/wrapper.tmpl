@@ -29,6 +29,13 @@ import (
 // {{ .Name }} is an atomic wrapper around {{ .Wrapped }}.
 type {{ .Name }} struct {
 	_ nocmp // disallow non-atomic comparison
+{{- if .Aligned }}
+
+	// Zero-length array of a 64-bit aligned type. On 32-bit platforms
+	// {{ .Wrapped }} is only 32-bit aligned, so without this the wrapper can be
+	// placed at an address that the 64-bit sync/atomic primitives reject.
+	_ [0]atomic.{{ .Name }}
+{{- end }}
 
 	v {{ .Wrapped }}
 }

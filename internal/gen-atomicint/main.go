@@ -85,12 +85,17 @@ func run(args []string) error {
 		Name     string
 		Wrapped  string
 		Unsigned bool
+		Aligned  bool
 		ToYear   int
 	}{
 		Name:     opts.Name,
 		Wrapped:  opts.Wrapped,
 		Unsigned: opts.Unsigned,
-		ToYear:   time.Now().Year(),
+		// 64-bit integers are only 32-bit aligned on 32-bit platforms, which
+		// makes the sync/atomic primitives panic when the wrapper is embedded
+		// at an odd offset. Force 64-bit alignment for those types.
+		Aligned: opts.Wrapped == "int64" || opts.Wrapped == "uint64",
+		ToYear:  time.Now().Year(),
 	}
 
 	var buff bytes.Buffer
